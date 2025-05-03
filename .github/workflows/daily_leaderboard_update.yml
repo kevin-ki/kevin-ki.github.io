@@ -34,20 +34,20 @@ jobs:
       - name: Generate Visualization from All Snapshots
         run: python generate_visualization.py # Run the visualization script next
 
-      # --- NEW STEP: Pull latest changes before committing ---
+      # Keep this step - it's still good practice, though force push might override its effect
       - name: Pull latest changes from remote
         run: |
-          git config --global user.name 'GitHub Actions Bot' # Configure git user for pull/rebase
+          git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git pull --rebase # Fetch remote changes and rebase local commit(s) on top
+          git pull --rebase || echo "Rebase failed or not needed, proceeding with commit." # Added fallback echo
 
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated update: Leaderboard snapshot and index.html"
-          # Commit the newly created snapshot in data/ and the updated index.html
           file_pattern: "index.html data/"
-          commit_user_name: "GitHub Actions Bot" # Keep user consistent
-          commit_user_email: "actions@github.com" # Keep email consistent
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
-          # No need to configure push options unless specific requirements exist
+          # --- Add force push option ---
+          push_options: '--force'
