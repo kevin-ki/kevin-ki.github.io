@@ -78,23 +78,24 @@ def find_leaderboard_component(config_json):
         return None, None
     for i, component in enumerate(config_json.get('components', [])):
         props = component.get('props', {})
+        # Check based on headers containing 'Arena Score' now
         if isinstance(props.get('value'), dict) and isinstance(props.get('headers'), list):
             headers = props['headers']
-            if any("elo" in str(h).lower() for h in headers):
+            if any("arena score" in str(h).lower() for h in headers): # Check for 'Arena Score'
                 print(f"Found leaderboard component at index {i} with headers: {headers}")
                 if 'data' in props['value']:
                     return i, headers
                 else:
-                    print(f"Warning: Found component with 'Elo' header at index {i}, but 'data' key is missing.")
+                    print(f"Warning: Found component with 'Arena Score' header at index {i}, but 'data' key is missing.")
         elif isinstance(props.get('value'), list) and isinstance(props.get('headers'), list):
              headers = props['headers']
-             if any("elo" in str(h).lower() for h in headers):
+             if any("arena score" in str(h).lower() for h in headers): # Check for 'Arena Score'
                  print(f"Found leaderboard component (list type) at index {i} with headers: {headers}")
                  if props['value']:
                      return i, headers
                  else:
-                     print(f"Warning: Found component (list type) with 'Elo' header at index {i}, but list is empty.")
-    print("Error: Could not find a component with 'Elo' in headers containing data.")
+                     print(f"Warning: Found component (list type) with 'Arena Score' header at index {i}, but list is empty.")
+    print("Error: Could not find a component with 'Arena Score' in headers containing data.") # Updated error message
     return None, None
 
 def fetch_lmsys_data(url):
@@ -140,61 +141,97 @@ def process_lmsys_snapshot(df_raw):
     if df_raw is None or df_raw.empty:
         return None
     df = df_raw.copy()
+
+    # --- Standardize Column Names ---
+    # Build the mapping dynamically based on actual headers found
     column_mapping = {}
-    for col in df.columns:
+    original_headers = df.columns.tolist()
+    print(f"Original headers found: {original_headers}") # Debug print
+
+    for col in original_headers:
         col_lower = str(col).lower()
-        if 'model' in col_lower and 'votes' not in col_lower:
+        # Use more specific matching first
+        if 'arena score' in col_lower: # *** CORRECTED: Map 'Arena Score' ***
+             column_mapping[col] = 'ELO_Score' # Keep internal name as ELO_Score for consistency
+        elif 'model' in col_lower and 'votes' not in col_lower and 'stylectrl' not in col_lower: # Avoid 'Model Votes', 'Rank (StyleCtrl)'
              column_mapping[col] = 'Model_Name'
-        elif 'elo' in col_lower and 'rating' in col_lower:
-             column_mapping[col] = 'ELO_Score'
         elif 'organization' in col_lower:
              column_mapping[col] = 'Provider'
         elif 'licence' in col_lower or 'license' in col_lower:
              column_mapping[col] = 'License'
+        # Add mappings for other potentially useful columns if needed (e.g., Votes, CI)
+        # elif 'votes' in col_lower:
+        #      column_mapping[col] = 'Votes'
+        # elif 'ci' in col_lower: # for confidence interval
+        #      column_mapping[col] = 'CI_95'
+
     print(f"Applying column mapping: {column_mapping}")
     df.rename(columns=column_mapping, inplace=True)
     print("Renamed columns:", df.columns.tolist())
 
+    # --- Select Required Columns ---
+    # Define the columns absolutely needed for the visualization script
     required_cols = ['Model_Name', 'ELO_Score', 'Provider']
-    if 'License' in df.columns: required_cols.append('License')
+    # Add 'License' if it exists after renaming and you want to keep it
+    if 'License' in df.columns:
+        required_cols.append('License')
+    # Add any other columns you mapped and want to keep (e.g., 'Votes', 'CI_95')
+    # if 'Votes' in df.columns: required_cols.append('Votes')
+    # if 'CI_95' in df.columns: required_cols.append('CI_95')
 
-    missing_required = [col for col in required_cols if col not in df.columns and col != 'License']
+
+    missing_required = [col for col in required_cols if col not in df.columns]
     if missing_required:
         print(f"Error: Missing critical columns after renaming: {missing_required}")
+        # Attempt to extract model name from HTML link if Model_Name is missing
         html_model_col = next((c for c in df_raw.columns if 'model' in str(c).lower() and '<a href' in str(df_raw[c].iloc[0]).lower()), None)
         if 'Model_Name' in missing_required and html_model_col:
              print(f"Attempting to extract Model_Name from HTML in column '{html_model_col}'")
              try:
                   df['Model_Name'] = df_raw[html_model_col].str.extract(r'<a[^>]*>(.*?)</a>', expand=False).str.strip()
                   print("Successfully extracted Model_Name from HTML.")
-                  required_cols.insert(0, 'Model_Name')
                   missing_required.remove('Model_Name')
              except Exception as e:
                   print(f"Failed to extract Model_Name from HTML: {e}")
-                  return None
+                  if 'Model_Name' in missing_required: return None
         else:
-             return None
+             if any(col in missing_required for col in ['ELO_Score', 'Provider']):
+                 print(f"Cannot proceed without columns: {missing_required}")
+                 return None
 
+
+    # Keep only the columns we need/have mapped
     cols_to_keep = [col for col in required_cols if col in df.columns]
     df = df[cols_to_keep].copy()
     print(f"Keeping columns: {cols_to_keep}")
 
+    # --- Clean Data Types ---
     print("Cleaning data types...")
     df['ELO_Score'] = pd.to_numeric(df['ELO_Score'], errors='coerce')
     df['Model_Name'] = df['Model_Name'].astype(str).fillna('Unknown').str.strip()
     df['Provider'] = df['Provider'].astype(str).fillna('Unknown').str.strip()
     if 'License' in df.columns:
         df['License'] = df['License'].astype(str).fillna('Unknown').str.strip()
+    # Clean other kept columns if necessary (e.g., Votes)
+    # if 'Votes' in df.columns:
+    #     df['Votes'] = pd.to_numeric(df['Votes'], errors='coerce')
 
+
+    # --- Handle Missing/Invalid Data ---
     initial_rows = len(df)
-    df.dropna(subset=['ELO_Score', 'Model_Name'], inplace=True)
+    # Drop rows if critical numeric/string data is missing/invalid AFTER conversion
+    df.dropna(subset=['ELO_Score', 'Model_Name', 'Provider'], inplace=True)
+    # Remove rows where Model_Name or Provider ended up empty after cleaning
     df = df[df['Model_Name'].str.lower() != 'unknown']
     df = df[df['Model_Name'] != '']
+    df = df[df['Provider'].str.lower() != 'unknown']
     df = df[df['Provider'] != '']
+
     dropped_rows = initial_rows - len(df)
     if dropped_rows > 0:
-        print(f"Dropped {dropped_rows} rows due to missing/invalid ELO/Model Name or empty strings.")
+        print(f"Dropped {dropped_rows} rows due to missing/invalid ELO/Model Name/Provider or empty strings.")
 
+    # --- Standardize Provider Names ---
     print("Standardizing provider names...")
     df['Provider'] = df['Provider'].apply(standardize_provider)
 
@@ -229,7 +266,7 @@ def main():
     snapshot_filename = FILENAME_TEMPLATE.format(today_str)
     print(f"Saving today's snapshot ({len(df_processed_new)} rows) to: {snapshot_filename}")
     try:
-        # Save without the Snapshot_Date column, as the date is in the filename
+        # Save the processed dataframe which now only contains the columns defined in cols_to_keep
         df_processed_new.to_csv(snapshot_filename, index=False)
         print(f"Successfully saved snapshot: {snapshot_filename}")
     except Exception as e:
