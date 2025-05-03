@@ -13,48 +13,13 @@ DATA_DIR = 'data'
 # Filename template for daily snapshots
 FILENAME_TEMPLATE = os.path.join(DATA_DIR, 'lmsys_snapshot_{}.csv')
 
-# --- Helper Functions (Standardize Provider, Extract JSON, Find Component - Copied from previous script) ---
+# --- Helper Functions ---
 
-def standardize_provider(provider_name):
-    """Standardizes provider names based on common variations."""
-    if pd.isna(provider_name) or not isinstance(provider_name, str): return 'Unknown'
-    name = provider_name.strip().lower()
-    # Add more specific mappings first (expand as needed, based on your previous script)
-    if name in ['openai', 'openai baseline', 'openai-internal']: return 'OpenAI'
-    if name in ['google', 'google research', 'google-research', 'google-internal', 'google deepmind']: return 'Google'
-    if name in ['meta', 'metaai', 'facebook', 'meta-llama', 'meta platforms inc.', 'meta platforms inc', 'llama team (meta)', 'meta/llama']: return 'Meta'
-    if name in ['anthropic', 'anthropic-internal']: return 'Anthropic'
-    if name in ['mistralai', 'mistral ai', 'mistral', 'mistral-ai']: return 'Mistral'
-    if name in ['alibaba', 'alibaba group', 'qwen', 'tongyi qianwen', 'modelscope', 'alibaba cloud']: return 'Alibaba'
-    if name in ['xai', 'x.ai', 'grok', 'xai corp.', 'xai-internal']: return 'xAI'
-    if name in ['deepseek', 'deepseek ai', 'deepseek-ai']: return 'DeepSeek'
-    if name in ['tencent', 'hunyuan', 'tencent ai lab', 'tencent research']: return 'Tencent'
-    if name in ['amazon', 'aws', 'titan', 'amazon-internal']: return 'Amazon'
-    if name in ['cohere']: return 'Cohere'
-    if name in ['01.ai', '01 ai', 'yi technologies', 'lingyi万物', '01-ai', 'yi', 'yi large', '01ai']: return '01 AI'
-    if name in ['databricks', 'dbrx']: return 'Databricks'
-    if name in ['zhipuai', 'zhipu.ai', 'zhipu', 'zhipu ai', 'chatglm', 'glm']: return 'Zhipu AI'
-    if name in ['microsoft', 'msft', 'phi', 'microsoft research', 'microsoft-internal']: return 'Microsoft'
-    if name in ['reka ai', 'reka']: return 'Reka AI'
-    if name in ['nvidia', 'nemotron', 'nvidia research']: return 'Nvidia'
-    if name in ['together ai', 'together computer', 'together']: return 'Together AI'
-    if name in ['upstage', 'solar']: return 'Upstage'
-    if name in ['intel']: return 'Intel'
-    if name in ['snowflake', 'arctic']: return 'Snowflake'
-    if name in ['baichuan', 'baichuan intelligent technology']: return 'Baichuan'
-    if name in ['adept', 'adept ai']: return 'Adept'
-    if name in ['teknium inc.', 'teknium']: return 'Teknium'
-    if name in ['kaist', 'korea advanced institute of science and technology']: return 'KAIST'
-    if name in ['eleutherai', 'eleuther ai']: return 'EleutherAI'
-    if name in ['bigcode project', 'bigcode', 'big code']: return 'BigCode'
-    if name in ['salesforce', 'xgen']: return 'Salesforce'
-    if name in ['allen institute for ai', 'ai2', 'allenai']: return 'Allen Institute for AI'
-    if name in ['hugging face', 'huggingface', 'huggingfaceh4']: return 'Hugging Face'
-    if name in ['lmsys', 'vicuna', 'lmsys.org']: return 'LMSys' # Treat Vicuna as LMSys project
-    if name in ['uc berkeley', 'berkeley', 'sky lab, uc berkeley']: return 'UC Berkeley'
-    if name in ['stanford', 'stanford university']: return 'Stanford'
-    # Fallback to original, cleaned name, Title Cased
-    return provider_name.strip().title()
+# --- standardize_provider function is removed or commented out ---
+# def standardize_provider(provider_name):
+#    """Standardizes provider names based on common variations."""
+#    # ... (function content) ...
+#    pass # Or remove the function entirely
 
 def extract_json_from_html(html_content):
     """Extracts the Gradio config JSON embedded in the HTML script tag."""
@@ -142,63 +107,72 @@ def process_lmsys_snapshot(df_raw):
         return None
     df = df_raw.copy()
 
+    # --- Store original model column name if it exists ---
+    # Find the original column that likely contains the model HTML link
+    original_model_col_name = None
+    for col in df.columns:
+        col_lower = str(col).lower()
+        # Heuristic: Look for 'model' but exclude columns clearly not the primary model name
+        if 'model' in col_lower and 'votes' not in col_lower and 'stylectrl' not in col_lower and 'rank' not in col_lower:
+            original_model_col_name = col
+            print(f"Identified potential original model column: '{original_model_col_name}'")
+            break # Assume the first match is the correct one
+
     # --- Standardize Column Names ---
-    # Build the mapping dynamically based on actual headers found
     column_mapping = {}
     original_headers = df.columns.tolist()
-    print(f"Original headers found: {original_headers}") # Debug print
+    print(f"Original headers found: {original_headers}")
 
     for col in original_headers:
         col_lower = str(col).lower()
-        # Use more specific matching first
-        if 'arena score' in col_lower: # *** CORRECTED: Map 'Arena Score' ***
-             column_mapping[col] = 'ELO_Score' # Keep internal name as ELO_Score for consistency
-        elif 'model' in col_lower and 'votes' not in col_lower and 'stylectrl' not in col_lower: # Avoid 'Model Votes', 'Rank (StyleCtrl)'
-             column_mapping[col] = 'Model_Name'
+        if 'arena score' in col_lower:
+             column_mapping[col] = 'ELO_Score'
+        # Don't map the original model column here yet if we found it
+        elif col == original_model_col_name:
+             continue # Skip mapping the original model column for now
+        elif 'model' in col_lower and 'votes' not in col_lower and 'stylectrl' not in col_lower:
+             # This handles cases where the heuristic above might miss, but map it only if needed
+             if 'Model_Name' not in column_mapping.values(): # Avoid overwriting if already mapped somehow
+                 column_mapping[col] = 'Model_Name'
         elif 'organization' in col_lower:
              column_mapping[col] = 'Provider'
         elif 'licence' in col_lower or 'license' in col_lower:
              column_mapping[col] = 'License'
-        # Add mappings for other potentially useful columns if needed (e.g., Votes, CI)
-        # elif 'votes' in col_lower:
-        #      column_mapping[col] = 'Votes'
-        # elif 'ci' in col_lower: # for confidence interval
-        #      column_mapping[col] = 'CI_95'
 
-    print(f"Applying column mapping: {column_mapping}")
+    print(f"Applying column mapping (excluding original model col): {column_mapping}")
     df.rename(columns=column_mapping, inplace=True)
-    print("Renamed columns:", df.columns.tolist())
+    print("Renamed columns (step 1):", df.columns.tolist())
+
+    # --- Extract Anchor Text for Model Name ---
+    if original_model_col_name and original_model_col_name in df.columns:
+        print(f"Extracting anchor text from '{original_model_col_name}' into 'Model_Name'...")
+        # Use regex to extract text between > and </a>, strip whitespace
+        # Handle potential errors if the cell doesn't contain the expected HTML
+        df['Model_Name'] = df[original_model_col_name].astype(str).str.extract(r'<a[^>]*>(.*?)</a>', expand=False).str.strip()
+        # Fill any NaNs resulting from failed extraction (e.g., if some rows didn't have links)
+        df['Model_Name'].fillna('Unknown', inplace=True)
+        print("Extraction complete. Sample Model Names:", df['Model_Name'].head().tolist())
+        # Optionally drop the original HTML column if desired
+        # df.drop(columns=[original_model_col_name], inplace=True)
+        # print(f"Dropped original model column: '{original_model_col_name}'")
+    elif 'Model_Name' not in df.columns:
+         print("Error: Could not find or create 'Model_Name' column.")
+         return None # Cannot proceed without model name
+
 
     # --- Select Required Columns ---
-    # Define the columns absolutely needed for the visualization script
+    # Now Model_Name should exist from the extraction step
     required_cols = ['Model_Name', 'ELO_Score', 'Provider']
-    # Add 'License' if it exists after renaming and you want to keep it
     if 'License' in df.columns:
         required_cols.append('License')
-    # Add any other columns you mapped and want to keep (e.g., 'Votes', 'CI_95')
-    # if 'Votes' in df.columns: required_cols.append('Votes')
-    # if 'CI_95' in df.columns: required_cols.append('CI_95')
-
 
     missing_required = [col for col in required_cols if col not in df.columns]
     if missing_required:
-        print(f"Error: Missing critical columns after renaming: {missing_required}")
-        # Attempt to extract model name from HTML link if Model_Name is missing
-        html_model_col = next((c for c in df_raw.columns if 'model' in str(c).lower() and '<a href' in str(df_raw[c].iloc[0]).lower()), None)
-        if 'Model_Name' in missing_required and html_model_col:
-             print(f"Attempting to extract Model_Name from HTML in column '{html_model_col}'")
-             try:
-                  df['Model_Name'] = df_raw[html_model_col].str.extract(r'<a[^>]*>(.*?)</a>', expand=False).str.strip()
-                  print("Successfully extracted Model_Name from HTML.")
-                  missing_required.remove('Model_Name')
-             except Exception as e:
-                  print(f"Failed to extract Model_Name from HTML: {e}")
-                  if 'Model_Name' in missing_required: return None
-        else:
-             if any(col in missing_required for col in ['ELO_Score', 'Provider']):
-                 print(f"Cannot proceed without columns: {missing_required}")
-                 return None
-
+         # This check should ideally not be needed now for Model_Name, but kept defensively
+         print(f"Error: Missing critical columns after processing: {missing_required}")
+         if any(col in missing_required for col in ['ELO_Score', 'Provider']):
+             print(f"Cannot proceed without columns: {missing_required}")
+             return None
 
     # Keep only the columns we need/have mapped
     cols_to_keep = [col for col in required_cols if col in df.columns]
@@ -208,32 +182,26 @@ def process_lmsys_snapshot(df_raw):
     # --- Clean Data Types ---
     print("Cleaning data types...")
     df['ELO_Score'] = pd.to_numeric(df['ELO_Score'], errors='coerce')
-    df['Model_Name'] = df['Model_Name'].astype(str).fillna('Unknown').str.strip()
+    # Model_Name is already string from extraction/fillna
+    # Provider needs cleaning
     df['Provider'] = df['Provider'].astype(str).fillna('Unknown').str.strip()
     if 'License' in df.columns:
         df['License'] = df['License'].astype(str).fillna('Unknown').str.strip()
-    # Clean other kept columns if necessary (e.g., Votes)
-    # if 'Votes' in df.columns:
-    #     df['Votes'] = pd.to_numeric(df['Votes'], errors='coerce')
-
 
     # --- Handle Missing/Invalid Data ---
     initial_rows = len(df)
-    # Drop rows if critical numeric/string data is missing/invalid AFTER conversion
     df.dropna(subset=['ELO_Score', 'Model_Name', 'Provider'], inplace=True)
-    # Remove rows where Model_Name or Provider ended up empty after cleaning
-    df = df[df['Model_Name'].str.lower() != 'unknown']
+    df = df[df['Model_Name'].str.lower() != 'unknown'] # Remove rows where extraction failed -> 'Unknown'
     df = df[df['Model_Name'] != '']
     df = df[df['Provider'].str.lower() != 'unknown']
     df = df[df['Provider'] != '']
-
     dropped_rows = initial_rows - len(df)
     if dropped_rows > 0:
         print(f"Dropped {dropped_rows} rows due to missing/invalid ELO/Model Name/Provider or empty strings.")
 
     # --- Standardize Provider Names ---
-    print("Standardizing provider names...")
-    df['Provider'] = df['Provider'].apply(standardize_provider)
+    # print("Standardizing provider names...") # No longer standardizing
+    # df['Provider'] = df['Provider'].apply(standardize_provider) # *** THIS LINE IS REMOVED/COMMENTED OUT ***
 
     # Sort snapshot by ELO score descending
     df.sort_values(by='ELO_Score', ascending=False, inplace=True)
@@ -249,24 +217,20 @@ def main():
     today_str = datetime.now().strftime('%Y-%m-%d')
     print(f"Snapshot Date: {today_str}")
 
-    # Create data directory if it doesn't exist
     if not os.path.exists(DATA_DIR):
         print(f"Creating data directory: {DATA_DIR}")
         os.makedirs(DATA_DIR)
 
-    # --- Fetch and Process New Data ---
     df_raw_new = fetch_lmsys_data(LMSYS_LEADERBOARD_URL)
     df_processed_new = process_lmsys_snapshot(df_raw_new)
 
     if df_processed_new is None or df_processed_new.empty:
         print("Failed to fetch or process new data. No snapshot saved.")
-        return # Exit if no new data
+        return
 
-    # --- Save Daily Snapshot ---
     snapshot_filename = FILENAME_TEMPLATE.format(today_str)
     print(f"Saving today's snapshot ({len(df_processed_new)} rows) to: {snapshot_filename}")
     try:
-        # Save the processed dataframe which now only contains the columns defined in cols_to_keep
         df_processed_new.to_csv(snapshot_filename, index=False)
         print(f"Successfully saved snapshot: {snapshot_filename}")
     except Exception as e:
