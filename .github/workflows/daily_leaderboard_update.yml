@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for pull/rebase
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,15 +34,20 @@ jobs:
       - name: Generate Visualization from All Snapshots
         run: python generate_visualization.py # Run the visualization script next
 
+      # --- NEW STEP: Pull latest changes before committing ---
+      - name: Pull latest changes from remote
+        run: |
+          git config --global user.name 'GitHub Actions Bot' # Configure git user for pull/rebase
+          git config --global user.email 'actions@github.com'
+          git pull --rebase # Fetch remote changes and rebase local commit(s) on top
+
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated update: Leaderboard snapshot and index.html"
           # Commit the newly created snapshot in data/ and the updated index.html
-          # Committing the whole 'data/' directory is simplest here.
           file_pattern: "index.html data/"
-          commit_user_name: "GitHub Actions Bot"
-          commit_user_email: "actions@github.com"
+          commit_user_name: "GitHub Actions Bot" # Keep user consistent
+          commit_user_email: "actions@github.com" # Keep email consistent
           commit_author: "GitHub Actions Bot <actions@github.com>"
-          # Optional: Add skip_dirty_check: true if needed, but usually not required
-          # Optional: Add skip_fetch: true if you are sure no other changes happened
+          # No need to configure push options unless specific requirements exist
