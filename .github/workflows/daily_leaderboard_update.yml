@@ -1,0 +1,54 @@
+name: Daily Leaderboard Update and Visualization
+
+on:
+  schedule:
+    - cron: '0 4 * * *' # Runs every day at 04:00 UTC
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Necessary to commit changes
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for pull/rebase
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Or your preferred version
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install necessary libraries for both scripts
+          pip install pandas numpy plotly requests beautifulsoup4
+          
+
+      - name: Fetch and Save Daily Snapshot
+        run: python fetch_daily_snapshot.py # Run the fetch script first
+
+      - name: Generate Visualization from All Snapshots
+        run: python generate_visualization.py # Run the visualization script next
+
+      # Keep this step - it's still good practice, though force push might override its effect
+      - name: Pull latest changes from remote
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+          git pull --rebase || echo "Rebase failed or not needed, proceeding with commit." # Added fallback echo
+
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated update: Leaderboard snapshot and index.html"
+          file_pattern: "index.html data/"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "actions@github.com"
+          commit_author: "GitHub Actions Bot <actions@github.com>"
+          # --- Add force push option ---
+          push_options: '--force'
