@@ -28,6 +28,13 @@ jobs:
           # Install necessary libraries for both scripts
           pip install pandas numpy plotly requests beautifulsoup4
           
+      # Add crawl4ai and use crawl4ai-setup
+      - name: Install crawl4ai and run setup
+        run: |
+          pip install crawl4ai
+          crawl4ai-setup
+          # Install additional dependencies if needed
+          pip install asyncio
 
       - name: Fetch and Save Daily Snapshot
         run: python fetch_daily_snapshot.py # Run the fetch script first
