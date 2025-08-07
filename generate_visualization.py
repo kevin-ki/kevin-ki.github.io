@@ -237,27 +237,137 @@ def generate_plot(df_processed):
 
     print("\n--- Generating Plotly Visualization ---")
 
-    # Config with REVISED Corporate Identity Colors (Same as before)
+    # ENHANCED COLOR MAPPING: Official brand colors + research-based colors + high-contrast additions
     COLOR_MAPPING = {
-        'OpenAI': '#10A37F', 'Google': '#4285F4', 'Meta': '#8A2BE2', 'Anthropic': '#D97706',
-        'Mistral': '#FF4B4B', 'Alibaba': '#FF8800', 'xAI': '#333333', 'DeepSeek': '#00BFFF',
-        'Tencent': '#0052D9', 'Amazon': '#FF9900', 'Cohere': '#8E44AD', '01 AI': '#2ECC71',
-        'Zhipu AI': '#2962FF', 'Databricks': '#FF3621', 'Microsoft': '#00A4EF', 'Reka AI': '#6B5B95',
-        'Nvidia': '#76B900', 'Together AI': '#FF6B6B', 'Upstage': '#4ECDC4', 'Snowflake': '#29B5E8',
-        'Baichuan': '#A0522D', 'Adept': '#FF69B4', 'Teknium': '#4682B4', 'KAIST': '#00427E',
-        'EleutherAI': '#000000', 'BigCode': '#FFD700', 'Salesforce': '#00A1E0',
-        'Allen Institute for AI': '#00B398', 'Hugging Face': '#FFD700', 'LMSys': '#FBBD01',
-        'UC Berkeley': '#003262', 'Stanford': '#8C1515',
-        # Add any other providers found in your data here
-        'Unknown': '#B0B0B0', 'Other': '#CCCCCC' # Default for unmapped known providers
+        # Major AI Providers - Official Brand Colors
+        'OpenAI': '#74AA9C',        # ChatGPT's official green
+        'Google': '#4285F4',        # Google's official blue
+        'Meta': '#0081FB',          # Meta's official blue (updated from purple)
+        'Anthropic': '#DE7356',     # Claude's official peach/coral
+        'Microsoft': '#00A4EF',     # Microsoft's official blue
+        'Amazon': '#FF9900',        # Amazon's official orange
+        
+        # Emerging Major Players - Research-based Colors
+        'xAI': '#000000',           # Black (X/xAI branding is predominantly black)
+        'DeepSeek': '#1E90FF',      # DeepSeek blue (professional blue from research)
+        'Mistral': '#FF7A00',       # Mistral orange (updated for better contrast)
+        'Alibaba': '#FF6A00',       # Alibaba orange
+        'Tencent': '#00599C',       # Tencent blue
+        'Nvidia': '#76B900',        # Nvidia green
+        'Cohere': '#9333EA',        # Purple for distinctiveness
+        
+        # Asian AI Companies - Distinctive Colors
+        'Zhipu AI': '#2962FF',      # Material Design blue
+        'Z.ai': '#7C3AED',          # Purple variant for distinction
+        'Moonshot': '#059669',      # Emerald green
+        'Baichuan': '#DC6803',      # Amber/orange
+        'SenseNova': '#BE185D',     # Pink
+        'Stepfun': '#7C2D12',       # Brown
+        'MiniMax': '#1565C0',       # Deep blue
+        '01 AI': '#16A34A',         # Green
+        'Zhipu': '#8B5CF6',        # Light purple (variant of Zhipu AI)
+        
+        # Research & Academic Institutions
+        'UC Berkeley': '#003262',    # Cal blue
+        'Stanford': '#8C1515',      # Stanford cardinal
+        'Allen AI': '#0891B2',      # Cyan
+        'AllenAI/UW': '#4338CA',    # Indigo
+        'Princeton': '#FF8C00',     # Princeton orange
+        'UW': '#4B0082',           # University purple
+        'Tsinghua': '#722F37',     # Maroon
+        'KAIST': '#DC2626',        # Red
+        
+        # Technology Companies
+        'Databricks': '#FF3621',    # Databricks red
+        'Snowflake': '#29B5E8',     # Snowflake blue
+        'Reka AI': '#6366F1',       # Indigo
+        'Upstage': '#06B6D4',       # Cyan
+        'Together AI': '#EF4444',   # Red
+        'Stability AI': '#8B5CF6',  # Purple
+        'Nomic AI': '#F59E0B',      # Amber
+        'InternLM': '#10B981',      # Emerald
+        'TII': '#0EA5E9',          # Sky blue
+        
+        # Open Source & Community
+        'HuggingFace': '#FFD21E',   # Hugging Face yellow
+        'LMSYS': '#FBBF24',        # Yellow
+        'EleutherAI': '#374151',    # Dark gray
+        'BigCode': '#F59E0B',      # Amber
+        'OpenChat': '#3B82F6',     # Blue
+        'NousResearch': '#8B5CF6', # Purple
+        'Cognitive Computations': '#14B8A6', # Teal
+        'RWKV': '#991B1B',         # Dark red
+        'OpenAssistant': '#059669', # Emerald
+        
+        # Specialized Companies
+        'AI21 Labs': '#7C3AED',    # Purple
+        'Ai2': '#0891B2',          # Cyan (Allen Institute variant)
+        'Adept': '#EC4899',        # Pink
+        'Inflection': '#6366F1',   # Indigo
+        'Character.AI': '#A855F7', # Purple
+        'Perplexity': '#059669',   # Emerald
+        'Anthropic': '#DE7356',    # Repeated for safety
+        
+        # International/Emerging
+        'DeepSeek AI': '#0284C7',  # DeepSeek variant
+        'NexusFlow': '#7C3AED',    # Purple
+        'Nexusflow': '#8B5CF6',    # Purple variant
+        'MosaicML': '#0891B2',     # Cyan
+        'Salesforce': '#00A1E0',   # Salesforce blue
+        'IBM': '#1F70C1',          # IBM blue
+        
+        # Additional High-Contrast Colors for New Providers
+        'Provider': '#6B7280',      # Gray (header edge case)
+        'Unknown': '#9CA3AF',       # Light gray
+        'Other': '#D1D5DB',        # Very light gray
+        
+        # Reserve colors for future providers
+        'Reserved1': '#84CC16',     # Lime
+        'Reserved2': '#F97316',     # Orange
+        'Reserved3': '#E11D48',     # Rose
+        'Reserved4': '#7C2D12',     # Brown
+        'Reserved5': '#1F2937',     # Dark gray
+        'Reserved6': '#065F46',     # Dark green
+        'Reserved7': '#92400E',     # Dark amber
+        'Reserved8': '#7E22CE',     # Dark purple
     }
 
     # Add colors for any providers found in the data but not in the mapping
+    # Enhanced fallback with diverse color palette
+    FALLBACK_COLORS = [
+        '#F97316',  # Orange
+        '#84CC16',  # Lime
+        '#06B6D4',  # Cyan
+        '#8B5CF6',  # Purple
+        '#F59E0B',  # Amber
+        '#EF4444',  # Red
+        '#10B981',  # Emerald
+        '#3B82F6',  # Blue
+        '#EC4899',  # Pink
+        '#6366F1',  # Indigo
+        '#14B8A6',  # Teal
+        '#F97316',  # Orange (repeat for more providers)
+        '#A855F7',  # Purple variant
+        '#059669',  # Emerald variant
+        '#DC2626',  # Red variant
+        '#7C3AED',  # Purple variant
+        '#0891B2',  # Cyan variant
+        '#BE185D',  # Pink variant
+        '#16A34A',  # Green variant
+        '#1565C0',  # Blue variant
+    ]
+    
     all_providers = df_processed['Provider'].unique()
+    unmapped_providers = []
     for provider in all_providers:
         if provider not in COLOR_MAPPING and provider != 'Unknown':
-            print(f"--- Plot Debug: Adding default color for unmapped provider: {provider}")
-            COLOR_MAPPING[provider] = COLOR_MAPPING['Other']
+            unmapped_providers.append(provider)
+    
+    # Assign fallback colors in a round-robin fashion for better distribution
+    for i, provider in enumerate(unmapped_providers):
+        fallback_color = FALLBACK_COLORS[i % len(FALLBACK_COLORS)]
+        COLOR_MAPPING[provider] = fallback_color
+        print(f"--- Plot Debug: Adding fallback color {fallback_color} for unmapped provider: {provider}")
 
 
     # Prepare dates

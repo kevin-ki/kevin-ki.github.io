@@ -58,6 +58,105 @@ def load_latest_snapshot(data_dir, snapshot_file_pattern):
         print(f"--- Snapshot Load Error: Failed to load latest snapshot: {e}")
         return None, None
 
+def extract_last_updated_date(html_content):
+    """
+    Extracts the 'Last Updated' date from the HTML content.
+    Returns the date as a datetime.date object or None if not found.
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Look for text containing "Last Updated" followed by date
+    try:
+        # Search for various patterns where "Last Updated" might appear
+        patterns = [
+            r"Last Updated\s*(?:\n|\r\n?|\s)*([A-Za-z]{3}\s+\d{1,2},?\s+\d{4})",  # "Last Updated\nAug 4, 2025"
+            r"Last Updated[:\s]*([A-Za-z]{3}\s+\d{1,2},?\s+\d{4})",  # "Last Updated: Aug 4, 2025"
+            r"Last Updated[:\s]*(\d{4}-\d{2}-\d{2})",  # "Last Updated: 2025-08-04"
+        ]
+        
+        text_content = soup.get_text()
+        
+        for pattern in patterns:
+            match = re.search(pattern, text_content, re.IGNORECASE)
+            if match:
+                date_str = match.group(1).strip()
+                print(f"Found Last Updated date string: '{date_str}'")
+                
+                # Try to parse the date
+                try:
+                    # Handle format like "Aug 4, 2025"
+                    if re.match(r"[A-Za-z]{3}\s+\d{1,2},?\s+\d{4}", date_str):
+                        # Remove comma if present
+                        date_str_clean = date_str.replace(',', '')
+                        parsed_date = datetime.strptime(date_str_clean, '%b %d %Y').date()
+                        print(f"Successfully parsed Last Updated date: {parsed_date}")
+                        return parsed_date
+                    # Handle format like "2025-08-04"
+                    elif re.match(r"\d{4}-\d{2}-\d{2}", date_str):
+                        parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                        print(f"Successfully parsed Last Updated date: {parsed_date}")
+                        return parsed_date
+                except ValueError as e:
+                    print(f"Failed to parse date '{date_str}': {e}")
+                    continue
+        
+        print("Warning: Could not find 'Last Updated' date in HTML content")
+        return None
+        
+    except Exception as e:
+        print(f"Error extracting last updated date: {e}")
+        return None
+
+def should_fetch_new_snapshot(last_updated_date, latest_snapshot_date):
+    """
+    Determines whether to fetch a new snapshot based on the last updated date
+    from the website and our latest snapshot date.
+    
+    Logic:
+    - If last_updated_date is yesterday, we should get a new snapshot
+    - If last_updated_date is older than yesterday, check if it's newer than our latest snapshot
+    - If we have no latest snapshot, always fetch
+    
+    Args:
+        last_updated_date (datetime.date): Date when the leaderboard was last updated
+        latest_snapshot_date (datetime.date or None): Date of our latest snapshot
+    
+    Returns:
+        tuple: (should_fetch: bool, reason: str)
+    """
+    today = date.today()
+    yesterday = date.fromordinal(today.toordinal() - 1)
+    
+    if last_updated_date is None:
+        return True, "Could not determine last updated date from website, fetching to be safe"
+    
+    if latest_snapshot_date is None:
+        return True, "No existing snapshots found, fetching new snapshot"
+    
+    print(f"Date comparison - Today: {today}, Yesterday: {yesterday}")
+    print(f"Website last updated: {last_updated_date}, Latest snapshot: {latest_snapshot_date}")
+    
+    # If the website was updated yesterday, we should fetch
+    if last_updated_date == yesterday:
+        return True, f"Website was updated yesterday ({yesterday}), fetching new snapshot"
+    
+    # If the website was updated earlier than yesterday, check if it's newer than our latest snapshot
+    if last_updated_date < yesterday:
+        if last_updated_date > latest_snapshot_date:
+            return True, f"Website last updated ({last_updated_date}) is newer than our latest snapshot ({latest_snapshot_date})"
+        else:
+            return False, f"Website last updated ({last_updated_date}) is not newer than our latest snapshot ({latest_snapshot_date})"
+    
+    # If the website was updated today, it might be too fresh - let's fetch anyway
+    if last_updated_date == today:
+        return True, f"Website was updated today ({today}), fetching new snapshot"
+    
+    # If the website was updated in the future (shouldn't happen, but just in case)
+    if last_updated_date > today:
+        return True, f"Website shows future update date ({last_updated_date}), fetching to be safe"
+    
+    return False, "No clear reason to fetch new snapshot"
+
 def parse_leaderboard_from_html(html_content):
     """
     Parses the HTML content to extract the leaderboard table using BeautifulSoup.
@@ -182,6 +281,10 @@ async def fetch_with_crawl4ai(url):
 async def main():
     print(f"Attempting to fetch data from {LMSYS_LEADERBOARD_URL}")
     
+    # First, load our latest snapshot to check dates
+    print("--- Loading latest snapshot for comparison ---")
+    df_latest, latest_snapshot_date = load_latest_snapshot(DATA_DIR, SNAPSHOT_FILE_PATTERN)
+    
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
@@ -205,6 +308,19 @@ async def main():
             f.write(html_content)
         print("Saved fetched HTML content to crawled_content.html")
 
+        # Extract the last updated date from the website
+        print("--- Extracting last updated date from website ---")
+        last_updated_date = extract_last_updated_date(html_content)
+        
+        # Determine if we should fetch a new snapshot
+        should_fetch, reason = should_fetch_new_snapshot(last_updated_date, latest_snapshot_date)
+        print(f"--- Decision: {'FETCH' if should_fetch else 'SKIP'} - {reason} ---")
+        
+        if not should_fetch:
+            print("Skipping snapshot creation based on date analysis.")
+            return
+        
+        # Proceed with parsing and saving the snapshot
         df_current = parse_leaderboard_from_html(html_content)
         if df_current is not None and not df_current.empty:
             df_processed = process_lmsys_snapshot(df_current)
