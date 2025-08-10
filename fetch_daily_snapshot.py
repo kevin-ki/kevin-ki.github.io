@@ -20,6 +20,25 @@ SNAPSHOT_FILE_PATTERN = os.path.join(DATA_DIR, 'lmsys_snapshot_*.csv')
 
 # --- Helper Functions ---
 
+def get_existing_snapshot_dates(snapshot_file_pattern):
+    """
+    Returns a set of datetime.date objects representing the dates we already
+    have snapshot files for, based on filenames.
+    """
+    dates = set()
+    try:
+        for f in glob.glob(snapshot_file_pattern):
+            try:
+                date_str = os.path.basename(f).replace('lmsys_snapshot_', '').replace('.csv', '')
+                file_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                dates.add(file_date)
+            except ValueError:
+                print(f"--- Existing Dates Warning: Could not parse date from filename: {f}")
+                continue
+    except Exception as e:
+        print(f"--- Existing Dates Error: {e}")
+    return dates
+
 def load_latest_snapshot(data_dir, snapshot_file_pattern):
     """
     Finds the latest dated snapshot file and loads it into a DataFrame.
@@ -157,6 +176,50 @@ def should_fetch_new_snapshot(last_updated_date, latest_snapshot_date):
     
     return False, "No clear reason to fetch new snapshot"
 
+def normalize_snapshot_for_comparison(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Normalize snapshot DataFrame for reliable content comparison.
+    Ensures consistent columns, ordering, types, and sorting.
+    """
+    if df is None or df.empty:
+        return pd.DataFrame(columns=['Model_Name', 'Provider', 'License', 'ELO_Score'])
+
+    df_norm = df.copy()
+    # Ensure expected columns exist
+    expected_cols = ['Model_Name', 'Provider', 'License', 'ELO_Score']
+    for col in expected_cols:
+        if col not in df_norm.columns:
+            if col == 'ELO_Score':
+                df_norm[col] = np.nan
+            else:
+                df_norm[col] = 'Unknown'
+
+    # Standardize types
+    df_norm['Model_Name'] = df_norm['Model_Name'].astype(str).str.strip()
+    df_norm['Provider'] = df_norm['Provider'].astype(str).str.strip()
+    if 'License' in df_norm.columns:
+        df_norm['License'] = df_norm['License'].astype(str).fillna('Unknown').str.strip()
+    df_norm['ELO_Score'] = pd.to_numeric(df_norm['ELO_Score'], errors='coerce').round(3)
+
+    # Keep only expected columns in a consistent order
+    df_norm = df_norm[expected_cols]
+
+    # Sort for stable comparison
+    df_norm.sort_values(by=['Provider', 'Model_Name', 'ELO_Score'], ascending=[True, True, False], inplace=True)
+    df_norm.reset_index(drop=True, inplace=True)
+
+    return df_norm
+
+def snapshots_differ(df_a: pd.DataFrame, df_b: pd.DataFrame) -> bool:
+    """
+    Returns True if the two processed snapshot DataFrames differ in content.
+    """
+    a = normalize_snapshot_for_comparison(df_a)
+    b = normalize_snapshot_for_comparison(df_b)
+    if a.shape != b.shape:
+        return True
+    return not a.equals(b)
+
 def parse_leaderboard_from_html(html_content):
     """
     Parses the HTML content to extract the leaderboard table using BeautifulSoup.
@@ -284,6 +347,7 @@ async def main():
     # First, load our latest snapshot to check dates
     print("--- Loading latest snapshot for comparison ---")
     df_latest, latest_snapshot_date = load_latest_snapshot(DATA_DIR, SNAPSHOT_FILE_PATTERN)
+    existing_snapshot_dates = get_existing_snapshot_dates(SNAPSHOT_FILE_PATTERN)
     
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -314,26 +378,48 @@ async def main():
         
         # Determine if we should fetch a new snapshot
         should_fetch, reason = should_fetch_new_snapshot(last_updated_date, latest_snapshot_date)
+
+        # Backfill logic: If we do not have a file for the website's last updated date,
+        # fetch to backfill even if the latest snapshot filename date is newer (mislabeled prior run)
+        if (not should_fetch) and (last_updated_date is not None) and (last_updated_date not in existing_snapshot_dates):
+            should_fetch = True
+            reason = f"Missing snapshot file for website's last updated date ({last_updated_date}); fetching to backfill"
         print(f"--- Decision: {'FETCH' if should_fetch else 'SKIP'} - {reason} ---")
-        
-        if not should_fetch:
-            print("Skipping snapshot creation based on date analysis.")
-            return
-        
-        # Proceed with parsing and saving the snapshot
+
+        # Parse current HTML to DataFrame for content comparison and potential save
         df_current = parse_leaderboard_from_html(html_content)
-        if df_current is not None and not df_current.empty:
-            df_processed = process_lmsys_snapshot(df_current)
-            if df_processed is not None and not df_processed.empty:
-                os.makedirs(DATA_DIR, exist_ok=True)
-                today_str = date.today().strftime('%Y-%m-%d')
-                output_filename = FILENAME_TEMPLATE.format(today_str)
-                df_processed.to_csv(output_filename, index=False)
-                print(f"Successfully saved today's snapshot to {output_filename}")
-            else:
-                print("Processed DataFrame is empty or None. Not saving snapshot.")
-        else:
+        if df_current is None or df_current.empty:
             print("Current DataFrame is empty or None. Not saving snapshot.")
+            return
+
+        df_processed = process_lmsys_snapshot(df_current)
+        if df_processed is None or df_processed.empty:
+            print("Processed DataFrame is empty or None. Not saving snapshot.")
+            return
+
+        os.makedirs(DATA_DIR, exist_ok=True)
+        # Use the website's Last Updated date for the snapshot filename when available
+        snapshot_date_for_filename = last_updated_date if last_updated_date else date.today()
+        snapshot_date_str = snapshot_date_for_filename.strftime('%Y-%m-%d')
+        output_filename = FILENAME_TEMPLATE.format(snapshot_date_str)
+
+        # If we decided to fetch (new/backfill), save; if not, only update when content differs
+        if os.path.exists(output_filename):
+            try:
+                df_existing = pd.read_csv(output_filename)
+                if snapshots_differ(df_existing, df_processed):
+                    df_processed.to_csv(output_filename, index=False)
+                    print(f"Detected content change for {snapshot_date_str}; updated snapshot at {output_filename}")
+                else:
+                    print(f"No content change detected for {snapshot_date_str}; leaving existing snapshot as-is.")
+            except Exception as e:
+                print(f"Warning: Could not read existing snapshot for comparison due to error: {e}. Overwriting to be safe.")
+                df_processed.to_csv(output_filename, index=False)
+                print(f"Safely updated snapshot for {snapshot_date_str} at {output_filename}")
+        else:
+            # File does not exist yet; create it (backfill or first-time save)
+            df_processed.to_csv(output_filename, index=False)
+            print(f"Successfully created snapshot for {snapshot_date_str} at {output_filename}")
     else:
         print("Failed to fetch HTML content with all methods.")
 
