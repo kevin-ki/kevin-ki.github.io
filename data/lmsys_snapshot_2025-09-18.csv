@@ -47,11 +47,9 @@ qwen3-235b-a22b,1373.0,Alibaba,Apache 2.0
 glm-4.5-air,1372.0,Z.ai,MIT
 qwen2.5-max,1371.0,Alibaba,Proprietary
 Minimaxminimax-m1,1369.0,MiniMax,Apache 2.0
-Anthropicclaude-3-7-sonnet-20250219,1369.0,Anthropic,Proprietary
-Anthropicclaude-3-5-sonnet-20241022,1368.0,Anthropic,Proprietary
+AnthropicClaude 3.5 Sonnet (10/22),1368.0,Anthropic,Proprietary
 grok-3-mini-high,1362.0,xAI,Proprietary
 gemma-3-27b-it,1363.0,Google,Gemma
-gemini-2.0-flash-001,1362.0,Google,Proprietary
 o3-mini-high,1361.0,OpenAI,Proprietary
 grok-3-mini-beta,1357.0,xAI,Proprietary
 deepseek-v3,1356.0,DeepSeek,DeepSeek
@@ -61,7 +59,7 @@ mistral-small-2506,1351.0,Mistral,Apache 2.0
 gpt-oss-120b,1350.0,OpenAI,Apache 2.0
 Tencenthunyuan-turbos-20250226,1344.0,Tencent,Proprietary
 gemini-2.0-flash-lite-preview-02-05,1351.0,Google,Proprietary
-gemini-1.5-pro-002,1350.0,Google,Proprietary
+Gemini-1.5-Pro-002,1350.0,Google,Proprietary
 Nvidiallama-3.1-nemotron-ultra-253b-v1,1344.0,Nvidia,Nvidia Open Model
 gpt-5-nano-high,1344.0,OpenAI,Proprietary
 qwen3-32b,1343.0,Alibaba,Apache 2.0
@@ -73,12 +71,12 @@ Nvidianvidia-llama-3.3-nemotron-super-49b-v1.5,1340.0,Nvidia,Nvidia Open
 gemma-3-12b-it,1339.0,Google,Gemma
 Tencenthunyuan-turbo-0110,1337.0,Tencent,Proprietary
 gpt-4o-2024-05-13,1342.0,OpenAI,Proprietary
-Anthropicclaude-3-5-sonnet-20240620,1339.0,Anthropic,Proprietary
+AnthropicClaude 3.5 Sonnet (06/20),1339.0,Anthropic,Proprietary
 Stepfunstep-2-16k-exp-202412,1331.0,StepFun,Proprietary
 qwq-32b,1334.0,Alibaba,Apache 2.0
 o1-mini,1333.0,OpenAI,Proprietary
 Metallama-3.1-405b-instruct-bf16,1333.0,Meta,Llama 3.1 Community
-gpt-4o-2024-08-06,1332.0,OpenAI,Proprietary
+GPT-4o (08/06),1332.0,OpenAI,Proprietary
 gemini-advanced-0514,1331.0,Google,Proprietary
 Nvidiallama-3.3-nemotron-49b-super-v1,1324.0,Nvidia,Nvidia
 grok-2-2024-08-13,1332.0,xAI,Proprietary
@@ -101,14 +99,14 @@ glm-4-plus,1316.0,Zhipu AI,Proprietary
 amazon-nova-experimental-chat-05-14,1315.0,Amazon,Proprietary
 qwen-max-0919,1315.0,Alibaba,Qwen
 Metallama-3.3-70b-instruct,1316.0,Meta,Llama-3.3
-gpt-4o-mini-2024-07-18,1314.0,OpenAI,Proprietary
+GPT-4o-mini (07/18),1314.0,OpenAI,Proprietary
 qwen2.5-plus-1127,1313.0,Alibaba,Proprietary
 Tencenthunyuan-standard-2025-02-10,1308.0,Tencent,Proprietary
 gpt-4-1106-preview,1311.0,OpenAI,Proprietary
 athene-v2-chat,1311.0,NexusFlow,NexusFlow
 gpt-4-0125-preview,1311.0,OpenAI,Proprietary
 mistral-large-2407,1311.0,Mistral,Mistral Research
-gemini-1.5-flash-002,1309.0,Google,Proprietary
+Gemini-1.5-Flash-002,1309.0,Google,Proprietary
 gemma-3-4b-it,1301.0,Google,Gemma
 grok-2-mini-2024-08-13,1305.0,xAI,Proprietary
 deepseek-v2.5,1304.0,DeepSeek,DeepSeek
@@ -119,7 +117,7 @@ magistral-medium-2506,1297.0,Mistral,Proprietary
 Nvidiallama-3.1-nemotron-70b-instruct,1296.0,Nvidia,Llama 3.1
 Tencenthunyuan-large-vision,1294.0,Tencent,Proprietary
 mistral-small-3.1-24b-instruct-2503,1296.0,Mistral,Apache 2.0
-Metallama-3.1-70b-instruct,1291.0,Meta,Llama 3.1 Community
+MetaMeta-Llama-3.1-70B-Instruct,1291.0,Meta,Llama 3.1 Community
 jamba-1.5-large,1285.0,AI21 Labs,Jamba Open
 reka-core-20240904,1285.0,Reka AI,Proprietary
 llama-3.1-tulu-3-70b,1284.0,Ai2,Llama 3.1
