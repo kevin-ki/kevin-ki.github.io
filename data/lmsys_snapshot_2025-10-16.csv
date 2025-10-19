@@ -5,6 +5,7 @@ Anthropicclaude-sonnet-4-5-20250929-thinking-32k,1445.0,Anthropic,Proprietary
 gpt-4.5-preview-2025-02-27,1441.0,OpenAI,Proprietary
 chatgpt-4o-latest-20250326,1440.0,OpenAI,Proprietary
 o3-2025-04-16,1440.0,OpenAI,Proprietary
+Anthropicclaude-sonnet-4-5-20250929,1438.0,Anthropic,Proprietary
 gpt-5-high,1437.0,OpenAI,Proprietary
 Anthropicclaude-opus-4-1-20250805,1437.0,Anthropic,Proprietary
 qwen3-max-preview,1434.0,Alibaba,Proprietary
@@ -28,7 +29,6 @@ Anthropicclaude-opus-4-20250514,1411.0,Anthropic,Proprietary
 deepseek-v3.2-exp,1408.0,DeepSeek AI,MIT
 gpt-4.1-2025-04-14,1411.0,OpenAI,Proprietary
 grok-3-preview-02-24,1409.0,xAI,Proprietary
-gemini-2.5-flash,1407.0,Google,Proprietary
 mistral-medium-2508,1406.0,Mistral,Proprietary
 glm-4.5,1406.0,Z.ai,MIT
 gemini-2.5-flash-preview-09-2025,1404.0,Google,Proprietary
@@ -54,6 +54,8 @@ qwen3-coder-480b-a35b-instruct,1384.0,Alibaba,Apache 2.0
 mistral-medium-2505,1381.0,Mistral,Proprietary
 Tencenthunyuan-turbos-20250416,1379.0,Tencent,Proprietary
 gpt-4.1-mini-2025-04-14,1379.0,OpenAI,Proprietary
+gemini-2.5-flash-lite-preview-09-2025-no-thinking,1374.0,Google,Proprietary
+gemini-2.5-flash-lite-preview-06-17-thinking,1374.0,Google,Proprietary
 qwen3-235b-a22b,1372.0,Alibaba,Apache 2.0
 qwen2.5-max,1372.0,Alibaba,Proprietary
 glm-4.5-air,1369.0,Z.ai,MIT
