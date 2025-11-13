@@ -2,11 +2,11 @@ Model_Name,ELO_Score,Provider,License
 gemini-2.5-pro,1452.0,Google,Proprietary
 Anthropicclaude-sonnet-4-5-20250929-thinking-32k,1449.0,Anthropic,Proprietary
 Anthropicclaude-opus-4-1-20250805-thinking-16k,1448.0,Anthropic,Proprietary
+Anthropicclaude-sonnet-4-5-20250929,1444.0,Anthropic,Proprietary
 gpt-4.5-preview-2025-02-27,1442.0,OpenAI,Proprietary
 Anthropicclaude-opus-4-1-20250805,1439.0,Anthropic,Proprietary
 chatgpt-4o-latest-20250326,1438.0,OpenAI,Proprietary
 gpt-5-high,1436.0,OpenAI,Proprietary
-Anthropicclaude-sonnet-4-5-20250929,1436.0,Anthropic,Proprietary
 o3-2025-04-16,1434.0,OpenAI,Proprietary
 qwen3-max-preview,1432.0,Alibaba,Proprietary
 glm-4.6,1428.0,Z.ai,MIT
@@ -34,6 +34,7 @@ grok-4-0709,1409.0,xAI,Proprietary
 glm-4.5,1408.0,Z.ai,MIT
 gemini-2.5-flash,1408.0,Google,Proprietary
 gemini-2.5-flash-preview-09-2025,1405.0,Google,Proprietary
+grok-4-fast-reasoning,1403.0,xAI,Proprietary
 Anthropicclaude-haiku-4-5-20251001,1402.0,Anthropic,Proprietary
 qwen3-next-80b-a3b-instruct,1402.0,Alibaba,Apache 2.0
 o1-2024-12-17,1400.0,OpenAI,Proprietary
@@ -81,6 +82,7 @@ ling-flash-2.0,1345.0,Ant Group,MIT
 Nvidiallama-3.1-nemotron-ultra-253b-v1,1345.0,Nvidia,Nvidia Open Model
 Stepfunstep-3,1345.0,StepFun,Apache 2.0
 gpt-4o-2024-05-13,1345.0,OpenAI,Proprietary
+Minimaxminimax-m2,1344.0,MiniMax,Apache 2.0
 amazon-nova-experimental-chat-10-09,1344.0,Amazon,Proprietary
 qwen3-32b,1344.0,Alibaba,Apache 2.0
 qwen-plus-0125,1344.0,Alibaba,Proprietary
