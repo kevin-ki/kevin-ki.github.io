@@ -11,7 +11,7 @@ gpt-5-high,1437.0,OpenAI,Proprietary
 gpt-5.1,1435.0,OpenAI,Proprietary
 o3-2025-04-16,1434.0,OpenAI,Proprietary
 qwen3-max-preview,1433.0,Alibaba,Proprietary
-MoonshotAIkimi-k2-thinking,1429.0,Moonshot,Modified MIT
+MoonshotAIkimi-k2-thinking-turbo,1429.0,Moonshot,Modified MIT
 glm-4.6,1426.0,Z.ai,MIT
 gpt-5-chat,1425.0,OpenAI,Proprietary
 qwen3-max-2025-09-23,1423.0,Alibaba,Proprietary
