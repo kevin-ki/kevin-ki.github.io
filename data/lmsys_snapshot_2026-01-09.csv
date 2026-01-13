@@ -15,18 +15,18 @@ ernie-5.0-preview-1203,1446.0,Baidu,Proprietary
 gpt-4.5-preview-2025-02-27,1443.0,OpenAI,Proprietary
 Anthropicclaude-opus-4-1-20250805,1443.0,Anthropic,Proprietary
 chatgpt-4o-latest-20250326,1442.0,OpenAI,Proprietary
-gpt-5.2,1440.0,OpenAI,Proprietary
-gpt-5.2-high,1440.0,OpenAI,Proprietary
 gpt-5-high,1436.0,OpenAI,Proprietary
 gpt-5.1,1435.0,OpenAI,Proprietary
+gpt-5.2-high,1434.0,OpenAI,Proprietary
+qwen3-max-preview,1434.0,Alibaba,Proprietary
 o3-2025-04-16,1433.0,OpenAI,Proprietary
 grok-4-1-fast-reasoning,1431.0,xAI,Proprietary
 MoonshotAIkimi-k2-thinking-turbo,1430.0,Moonshot,Modified MIT
 ernie-5.0-preview-1103,1429.0,Baidu,Proprietary
+gpt-5.2,1425.0,OpenAI,Proprietary
 gpt-5-chat,1425.0,OpenAI,Proprietary
 qwen3-max-2025-09-23,1424.0,Alibaba,Proprietary
 glm-4.6,1424.0,Z.ai,MIT
-qwen3-max-preview,1424.0,Alibaba,Proprietary
 deepseek-v3.2-exp,1423.0,DeepSeek AI,MIT
 Anthropicclaude-opus-4-20250514-thinking-16k,1423.0,Anthropic,Proprietary
 qwen3-235b-a22b-instruct-2507,1422.0,Alibaba,Apache 2.0
@@ -61,6 +61,7 @@ Anthropicclaude-sonnet-4-20250514-thinking-32k,1399.0,Anthropic,Proprietary
 qwen3-235b-a22b-thinking-2507,1398.0,Alibaba,Apache 2.0
 mimo-v2-flash (non-thinking),1397.0,Xiaomi,MIT
 deepseek-r1,1396.0,DeepSeek,MIT
+amazon-nova-experimental-chat-12-10,1396.0,Amazon,Proprietary
 qwen3-vl-235b-a22b-thinking,1394.0,Alibaba,Apache 2.0
 deepseek-v3-0324,1393.0,DeepSeek,MIT
 gpt-5-mini-high,1392.0,OpenAI,Proprietary
