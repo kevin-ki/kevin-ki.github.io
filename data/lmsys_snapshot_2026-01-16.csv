@@ -140,6 +140,7 @@ Metallama-4-scout-17b-16e-instruct,1323.0,Meta,Llama
 Anthropicclaude-3-opus-20240229,1323.0,Anthropic,Proprietary
 gpt-4.1-nano-2025-04-14,1322.0,OpenAI,Proprietary
 Stepfunstep-1o-turbo-202506,1321.0,StepFun,Proprietary
+olmo-3.1-32b-instruct,1321.0,Allen AI,Apache 2.0
 ring-flash-2.0,1320.0,Ant Group,MIT
 Metallama-3.3-70b-instruct,1320.0,Meta,Llama-3.3
 glm-4-plus,1319.0,Zhipu AI,Proprietary
@@ -177,6 +178,7 @@ gpt-4-0314,1288.0,OpenAI,Proprietary
 Nvidiallama-3.1-nemotron-51b-instruct,1287.0,Nvidia,Llama 3.1
 llama-3.1-tulu-3-70b,1287.0,Ai2,Llama 3.1
 gemini-1.5-flash-001,1286.0,Google,Proprietary
+olmo-3.1-32b-think,1285.0,Allen AI,Apache 2.0
 Anthropicclaude-3-sonnet-20240229,1282.0,Anthropic,Proprietary
 gemma-2-9b-it-simpo,1280.0,Princeton,MIT
 Nvidianemotron-4-340b-instruct,1278.0,Nvidia,NVIDIA Open Model
