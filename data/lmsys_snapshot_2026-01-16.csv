@@ -16,6 +16,7 @@ Anthropicclaude-opus-4-1-20250805,1445.0,Anthropic,Proprietary
 gpt-5.2,1445.0,OpenAI,Proprietary
 gpt-4.5-preview-2025-02-27,1444.0,OpenAI,Proprietary
 chatgpt-4o-latest-20250326,1442.0,OpenAI,Proprietary
+glm-4.7,1441.0,Z.ai,MIT
 gpt-5.2-high,1436.0,OpenAI,Proprietary
 gpt-5.1,1435.0,OpenAI,Proprietary
 gpt-5-high,1435.0,OpenAI,Proprietary
@@ -77,6 +78,7 @@ mistral-medium-2505,1384.0,Mistral,Proprietary
 qwen3-30b-a3b-instruct-2507,1383.0,Alibaba,Apache 2.0
 Tencenthunyuan-turbos-20250416,1382.0,Tencent,Proprietary
 gpt-4.1-mini-2025-04-14,1382.0,OpenAI,Proprietary
+Minimaxminimax-m2.1-preview,1382.0,MiniMax,MIT
 gemini-2.5-flash-lite-preview-09-2025-no-thinking,1378.0,Google,Proprietary
 glm-4.6v,1378.0,Z.ai,MIT
 gemini-2.5-flash-lite-preview-06-17-thinking,1375.0,Google,Proprietary
