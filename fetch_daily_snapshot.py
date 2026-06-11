@@ -1,428 +1,180 @@
-import os
-import requests
-import pandas as pd
+"""Fetch the arena.ai text leaderboard and save it as a dated CSV snapshot.
+
+The leaderboard page (https://arena.ai/leaderboard/text) is a Next.js app that
+ships the full leaderboard as structured JSON inside its flight payload
+(self.__next_f.push(...) script chunks). We parse that payload instead of the
+rendered HTML table: it carries clean fields (modelDisplayName,
+modelOrganization, license, full-precision rating) and the official data date
+(voteCutoffISOString), and it is far more stable than the page markup.
+
+Snapshots are named data/lmsys_snapshot_<voteCutoffDate>.csv. Every failure
+path exits non-zero so the GitHub Actions run turns red instead of silently
+producing nothing.
+"""
+
 import json
+import os
 import re
-from datetime import datetime, date
-import numpy as np
-import glob
-from bs4 import BeautifulSoup
-from crawl4ai import AsyncWebCrawler
-import asyncio
+import sys
+from datetime import datetime
+
+import pandas as pd
+import requests
 
 # --- Configuration ---
-LMSYS_LEADERBOARD_URL = "https://lmarena.ai/leaderboard/text"
-# Directory to store daily snapshot CSV files
-DATA_DIR = 'data'
-# Filename template for daily snapshots
-FILENAME_TEMPLATE = os.path.join(DATA_DIR, 'lmsys_snapshot_{}.csv')
-SNAPSHOT_FILE_PATTERN = os.path.join(DATA_DIR, 'lmsys_snapshot_*.csv')
+LEADERBOARD_URL = "https://arena.ai/leaderboard/text"
+DATA_DIR = "data"
+FILENAME_TEMPLATE = os.path.join(DATA_DIR, "lmsys_snapshot_{}.csv")
+# Refuse to save a snapshot with fewer models than this. Protects against
+# partially rendered pages silently shrinking the history (the full board
+# has 300+ models).
+MIN_EXPECTED_MODELS = 100
+REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    )
+}
 
-# --- Helper Functions ---
+FLIGHT_CHUNK_RE = re.compile(r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*)"\]\)')
 
-def get_existing_snapshot_dates(snapshot_file_pattern):
-    """
-    Returns a set of datetime.date objects representing the dates we already
-    have snapshot files for, based on filenames.
-    """
-    dates = set()
-    try:
-        for f in glob.glob(snapshot_file_pattern):
-            try:
-                date_str = os.path.basename(f).replace('lmsys_snapshot_', '').replace('.csv', '')
-                file_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-                dates.add(file_date)
-            except ValueError:
-                print(f"--- Existing Dates Warning: Could not parse date from filename: {f}")
-                continue
-    except Exception as e:
-        print(f"--- Existing Dates Error: {e}")
-    return dates
 
-def load_latest_snapshot(data_dir, snapshot_file_pattern):
-    """
-    Finds the latest dated snapshot file and loads it into a DataFrame.
-    Returns the DataFrame and its date, or None, None if no snapshots are found.
-    """
-    try:
-        snapshot_files = glob.glob(snapshot_file_pattern)
-        if not snapshot_files:
-            print("--- Snapshot Load: No existing snapshots found.")
-            return None, None
+def decode_flight_payload(html: str) -> str:
+    """Concatenate and unescape all Next.js flight payload chunks."""
+    parts = []
+    for chunk in FLIGHT_CHUNK_RE.findall(html):
+        try:
+            # The chunk is a JS string literal body; JSON string decoding
+            # handles the same escape sequences.
+            parts.append(json.loads('"' + chunk + '"'))
+        except json.JSONDecodeError:
+            continue
+    return "".join(parts)
 
-        sorted_files = []
-        for f in snapshot_files:
-            try:
-                date_str = os.path.basename(f).replace('lmsys_snapshot_', '').replace('.csv', '')
-                file_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-                sorted_files.append((file_date, f))
-            except ValueError:
-                print(f"--- Snapshot Load Warning: Could not parse date from filename: {f}")
-                continue
 
-        if not sorted_files:
-             print("--- Snapshot Load: No files with valid dates found.")
-             return None, None
-
-        latest_file_date, latest_file_path = max(sorted_files)
-
-        print(f"--- Snapshot Load: Loading latest snapshot from: {latest_file_path} (Date: {latest_file_date})")
-
-        df_latest = pd.read_csv(latest_file_path)
-        print(f"--- Snapshot Load: Successfully loaded {len(df_latest)} rows from latest snapshot.")
-
-        return df_latest, latest_file_date
-
-    except Exception as e:
-        print(f"--- Snapshot Load Error: Failed to load latest snapshot: {e}")
-        return None, None
-
-def extract_last_updated_date(html_content):
-    """
-    Extracts the 'Last Updated' date from the HTML content.
-    Returns the date as a datetime.date object or None if not found.
-    """
-    soup = BeautifulSoup(html_content, 'html.parser')
-    
-    # Look for text containing "Last Updated" followed by date
-    try:
-        # Search for various patterns where "Last Updated" might appear
-        patterns = [
-            r"Last Updated\s*(?:\n|\r\n?|\s)*([A-Za-z]{3}\s+\d{1,2},?\s+\d{4})",  # "Last Updated\nAug 4, 2025"
-            r"Last Updated[:\s]*([A-Za-z]{3}\s+\d{1,2},?\s+\d{4})",  # "Last Updated: Aug 4, 2025"
-            r"Last Updated[:\s]*(\d{4}-\d{2}-\d{2})",  # "Last Updated: 2025-08-04"
-        ]
-        
-        text_content = soup.get_text()
-        
-        for pattern in patterns:
-            match = re.search(pattern, text_content, re.IGNORECASE)
-            if match:
-                date_str = match.group(1).strip()
-                print(f"Found Last Updated date string: '{date_str}'")
-                
-                # Try to parse the date
-                try:
-                    # Handle format like "Aug 4, 2025"
-                    if re.match(r"[A-Za-z]{3}\s+\d{1,2},?\s+\d{4}", date_str):
-                        # Remove comma if present
-                        date_str_clean = date_str.replace(',', '')
-                        parsed_date = datetime.strptime(date_str_clean, '%b %d %Y').date()
-                        print(f"Successfully parsed Last Updated date: {parsed_date}")
-                        return parsed_date
-                    # Handle format like "2025-08-04"
-                    elif re.match(r"\d{4}-\d{2}-\d{2}", date_str):
-                        parsed_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-                        print(f"Successfully parsed Last Updated date: {parsed_date}")
-                        return parsed_date
-                except ValueError as e:
-                    print(f"Failed to parse date '{date_str}': {e}")
-                    continue
-        
-        print("Warning: Could not find 'Last Updated' date in HTML content")
-        return None
-        
-    except Exception as e:
-        print(f"Error extracting last updated date: {e}")
-        return None
-
-def should_fetch_new_snapshot(last_updated_date, latest_snapshot_date):
-    """
-    Determines whether to fetch a new snapshot based on the last updated date
-    from the website and our latest snapshot date.
-    
-    Logic:
-    - If last_updated_date is yesterday, we should get a new snapshot
-    - If last_updated_date is older than yesterday, check if it's newer than our latest snapshot
-    - If we have no latest snapshot, always fetch
-    
-    Args:
-        last_updated_date (datetime.date): Date when the leaderboard was last updated
-        latest_snapshot_date (datetime.date or None): Date of our latest snapshot
-    
-    Returns:
-        tuple: (should_fetch: bool, reason: str)
-    """
-    today = date.today()
-    yesterday = date.fromordinal(today.toordinal() - 1)
-    
-    if last_updated_date is None:
-        return True, "Could not determine last updated date from website, fetching to be safe"
-    
-    if latest_snapshot_date is None:
-        return True, "No existing snapshots found, fetching new snapshot"
-    
-    print(f"Date comparison - Today: {today}, Yesterday: {yesterday}")
-    print(f"Website last updated: {last_updated_date}, Latest snapshot: {latest_snapshot_date}")
-    
-    # If the website was updated yesterday, we should fetch
-    if last_updated_date == yesterday:
-        return True, f"Website was updated yesterday ({yesterday}), fetching new snapshot"
-    
-    # If the website was updated earlier than yesterday, check if it's newer than our latest snapshot
-    if last_updated_date < yesterday:
-        if last_updated_date > latest_snapshot_date:
-            return True, f"Website last updated ({last_updated_date}) is newer than our latest snapshot ({latest_snapshot_date})"
+def extract_json_value(blob: str, start: int):
+    """Parse the JSON array/object starting at blob[start] via bracket matching."""
+    opener = blob[start]
+    closer = {"[": "]", "{": "}"}[opener]
+    depth, in_str, esc = 0, False, False
+    for i in range(start, len(blob)):
+        ch = blob[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
         else:
-            return False, f"Website last updated ({last_updated_date}) is not newer than our latest snapshot ({latest_snapshot_date})"
-    
-    # If the website was updated today, it might be too fresh - let's fetch anyway
-    if last_updated_date == today:
-        return True, f"Website was updated today ({today}), fetching new snapshot"
-    
-    # If the website was updated in the future (shouldn't happen, but just in case)
-    if last_updated_date > today:
-        return True, f"Website shows future update date ({last_updated_date}), fetching to be safe"
-    
-    return False, "No clear reason to fetch new snapshot"
+            if ch == '"':
+                in_str = True
+            elif ch == opener:
+                depth += 1
+            elif ch == closer:
+                depth -= 1
+                if depth == 0:
+                    return json.loads(blob[start : i + 1])
+    raise ValueError("Unbalanced brackets while extracting JSON value from flight payload")
 
-def normalize_snapshot_for_comparison(df: pd.DataFrame) -> pd.DataFrame:
+
+def extract_snapshot(html: str):
+    """Extract the text leaderboard from page HTML.
+
+    Returns (DataFrame with Model_Name/ELO_Score/Provider/License, cutoff_date).
+    Raises ValueError if the expected payload structure is missing.
     """
-    Normalize snapshot DataFrame for reliable content comparison.
-    Ensures consistent columns, ordering, types, and sorting.
-    """
-    if df is None or df.empty:
-        return pd.DataFrame(columns=['Model_Name', 'Provider', 'License', 'ELO_Score'])
+    blob = decode_flight_payload(html)
+    if not blob:
+        raise ValueError("No Next.js flight payload found in page HTML")
 
-    df_norm = df.copy()
-    # Ensure expected columns exist
-    expected_cols = ['Model_Name', 'Provider', 'License', 'ELO_Score']
-    for col in expected_cols:
-        if col not in df_norm.columns:
-            if col == 'ELO_Score':
-                df_norm[col] = np.nan
-            else:
-                df_norm[col] = 'Unknown'
+    # Anchor on the text arena so we never grab another leaderboard's entries.
+    anchor = blob.find('"arenaSlug":"text"')
+    if anchor == -1:
+        raise ValueError('Could not find "arenaSlug":"text" in flight payload')
 
-    # Standardize types
-    df_norm['Model_Name'] = df_norm['Model_Name'].astype(str).str.strip()
-    df_norm['Provider'] = df_norm['Provider'].astype(str).str.strip()
-    if 'License' in df_norm.columns:
-        df_norm['License'] = df_norm['License'].astype(str).fillna('Unknown').str.strip()
-    df_norm['ELO_Score'] = pd.to_numeric(df_norm['ELO_Score'], errors='coerce').round(3)
+    entries_key = blob.find('"entries":', anchor)
+    if entries_key == -1:
+        raise ValueError('Could not find "entries" after text arena anchor')
+    entries = extract_json_value(blob, entries_key + len('"entries":'))
+    if not entries:
+        raise ValueError("Leaderboard entries array is empty")
 
-    # Keep only expected columns in a consistent order
-    df_norm = df_norm[expected_cols]
+    cutoff_match = re.search(r'"voteCutoffISOString":"(\d{4}-\d{2}-\d{2})', blob[anchor:])
+    if not cutoff_match:
+        raise ValueError("Could not find voteCutoffISOString in flight payload")
+    cutoff_date = datetime.strptime(cutoff_match.group(1), "%Y-%m-%d").date()
 
-    # Sort for stable comparison
-    df_norm.sort_values(by=['Provider', 'Model_Name', 'ELO_Score'], ascending=[True, True, False], inplace=True)
-    df_norm.reset_index(drop=True, inplace=True)
+    rows = []
+    for e in entries:
+        rows.append(
+            {
+                "Model_Name": e["modelDisplayName"],
+                "ELO_Score": round(float(e["rating"]), 2),
+                "Provider": e["modelOrganization"],
+                "License": e.get("license") or "Unknown",
+                "Votes": e.get("votes"),
+                "Input_Price": e.get("inputPricePerMillion"),
+                "Output_Price": e.get("outputPricePerMillion"),
+                "Context_Length": e.get("contextLength"),
+            }
+        )
+    df = pd.DataFrame(rows)
 
-    return df_norm
+    incomplete = df[df["Model_Name"].isna() | df["Provider"].isna() | df["ELO_Score"].isna()]
+    if not incomplete.empty:
+        raise ValueError(f"{len(incomplete)} entries have missing critical fields:\n{incomplete}")
+
+    return df, cutoff_date
+
 
 def snapshots_differ(df_a: pd.DataFrame, df_b: pd.DataFrame) -> bool:
-    """
-    Returns True if the two processed snapshot DataFrames differ in content.
-    """
-    a = normalize_snapshot_for_comparison(df_a)
-    b = normalize_snapshot_for_comparison(df_b)
-    if a.shape != b.shape:
+    if set(df_a.columns) != set(df_b.columns):
         return True
+    cols = sorted(df_a.columns)
+    sort_keys = ["Model_Name", "Provider", "ELO_Score"]
+    a = df_a[cols].sort_values(sort_keys).reset_index(drop=True)
+    b = df_b[cols].sort_values(sort_keys).reset_index(drop=True)
     return not a.equals(b)
 
-def parse_leaderboard_from_html(html_content):
-    """
-    Parses the HTML content to extract the leaderboard table using BeautifulSoup.
-    """
-    soup = BeautifulSoup(html_content, 'html.parser')
-    table = soup.find('table')
 
-    if not table:
-        print("Error: Could not find the leaderboard table in the HTML.")
-        return None
+def save_snapshot(df: pd.DataFrame, cutoff_date) -> str:
+    """Write the snapshot CSV for cutoff_date. Returns a description of what happened."""
+    os.makedirs(DATA_DIR, exist_ok=True)
+    path = FILENAME_TEMPLATE.format(cutoff_date.isoformat())
 
-    headers = []
-    for th in table.find_all('th'):
-        headers.append(th.get_text(strip=True))
+    if os.path.exists(path):
+        existing = pd.read_csv(path)
+        if set(existing.columns) >= {"Model_Name", "ELO_Score", "Provider", "License"} and not snapshots_differ(existing, df):
+            return f"unchanged: {path} already matches today's data"
+        df.to_csv(path, index=False)
+        return f"updated: {path} (content changed for {cutoff_date})"
 
-    data = []
-    for row in table.find_all('tr')[1:]:
-        cols = row.find_all('td')
-        cols = [ele.get_text(strip=True) for ele in cols]
-        data.append(cols)
+    df.to_csv(path, index=False)
+    return f"created: {path}"
 
-    if not headers or not data:
-        print("Error: No headers or data found in the leaderboard table.")
-        return None
 
-    df = pd.DataFrame(data, columns=headers)
-    print(f"Successfully parsed {len(df)} rows from HTML table.")
-    return df
+def main():
+    print(f"Fetching {LEADERBOARD_URL}")
+    response = requests.get(LEADERBOARD_URL, headers=REQUEST_HEADERS, timeout=30)
+    response.raise_for_status()
 
-def process_lmsys_snapshot(df_raw):
-    """
-    Processes the raw DataFrame snapshot.
-    """
-    if df_raw is None or df_raw.empty:
-        print("No raw data provided to process.")
-        return None
-    df = df_raw.copy()
+    df, cutoff_date = extract_snapshot(response.text)
+    print(f"Extracted {len(df)} models, vote cutoff date {cutoff_date}")
 
-    # --- Identify and Standardize Column Names ---
-    column_mapping = {}
-    original_headers = df.columns.tolist()
-    print(f"Original headers for processing: {original_headers}")
-
-    # Map specific columns (case-insensitive, partial match)
-    header_map = {col: str(col).lower() for col in original_headers}
-
-    for original_col, lower_col_name in header_map.items():
-        if 'arena score' in lower_col_name or 'score' == lower_col_name:
-             column_mapping[original_col] = 'ELO_Score'
-        elif 'organization' in lower_col_name:
-             column_mapping[original_col] = 'Provider'
-        elif 'licence' in lower_col_name or 'license' in lower_col_name:
-             column_mapping[original_col] = 'License'
-        elif 'model' in lower_col_name:
-             column_mapping[original_col] = 'Model_Name'
-
-    print(f"Applying column mapping: {column_mapping}")
-    df.rename(columns=column_mapping, inplace=True)
-    print("Renamed columns (step 1):", df.columns.tolist())
-
-    required_cols = ['Model_Name', 'ELO_Score', 'Provider']
-    if 'License' in df.columns:
-        required_cols.append('License')
-
-    cols_to_keep = [col for col in required_cols if col in df.columns]
-
-    missing_critical = [col for col in ['Model_Name', 'ELO_Score', 'Provider'] if col not in cols_to_keep]
-    if missing_critical:
-         print(f"Error: Missing critical columns after processing: {missing_critical}. Cannot proceed.")
-         return None
-
-    df = df[cols_to_keep].copy()
-    print(f"Keeping and ordering columns: {cols_to_keep}")
-
-    print("Cleaning data types...")
-    df['ELO_Score'] = pd.to_numeric(df['ELO_Score'], errors='coerce')
-
-    for col in ['Model_Name', 'Provider']:
-         if col in df.columns:
-              df[col] = df[col].astype(str).fillna('Unknown').str.strip()
-    if 'License' in df.columns:
-        df['License'] = df['License'].astype(str).fillna('Unknown').str.strip()
-
-    initial_rows = len(df)
-    df.dropna(subset=['Model_Name', 'ELO_Score', 'Provider'], inplace=True)
-
-    df = df[df['Model_Name'] != 'Unknown']
-    df = df[df['Provider'] != 'Unknown']
-
-    if len(df) < initial_rows:
-        print(f"Dropped {initial_rows - len(df)} rows due to missing critical information or 'Unknown' values.")
-
-    print("Final DataFrame columns:", df.columns.tolist())
-    print("Final DataFrame head:\n", df.head())
-
-    return df
-
-async def fetch_with_crawl4ai(url):
-    """
-    Fetch HTML content using crawl4ai in stealth mode.
-    """
-    try:
-        print("Attempting to fetch data using crawl4ai in stealth mode...")
-        crawler = AsyncWebCrawler()
-        result = await crawler.arun(
-            url=url,
-            stealth=True,
-            wait_for_js=True,
-            timeout=30
+    if len(df) < MIN_EXPECTED_MODELS:
+        raise ValueError(
+            f"Only {len(df)} models extracted (expected >= {MIN_EXPECTED_MODELS}); "
+            "refusing to save a suspiciously small snapshot"
         )
-        
-        if result.success:
-            print("Successfully fetched HTML content using crawl4ai.")
-            return result.html
-        else:
-            print(f"crawl4ai failed: {result.error_message}")
-            return None
-    except Exception as e:
-        print(f"Error using crawl4ai: {e}")
-        return None
 
-async def main():
-    print(f"Attempting to fetch data from {LMSYS_LEADERBOARD_URL}")
-    
-    # First, load our latest snapshot to check dates
-    print("--- Loading latest snapshot for comparison ---")
-    df_latest, latest_snapshot_date = load_latest_snapshot(DATA_DIR, SNAPSHOT_FILE_PATTERN)
-    existing_snapshot_dates = get_existing_snapshot_dates(SNAPSHOT_FILE_PATTERN)
-    
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    
-    html_content = None
-    
-    try:
-        print("Trying with requests and fake user agent...")
-        response = requests.get(LMSYS_LEADERBOARD_URL, headers=headers, timeout=10)
-        response.raise_for_status()
-        html_content = response.text
-        print("Successfully fetched HTML content with requests.")
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data with requests: {e}")
-        print("Falling back to crawl4ai stealth mode...")
-        html_content = await fetch_with_crawl4ai(LMSYS_LEADERBOARD_URL)
-    
-    if html_content:
-        # Save the fetched HTML content for inspection
-        with open("crawled_content.html", "w", encoding="utf-8") as f:
-            f.write(html_content)
-        print("Saved fetched HTML content to crawled_content.html")
+    result = save_snapshot(df, cutoff_date)
+    print(result)
 
-        # Extract the last updated date from the website
-        print("--- Extracting last updated date from website ---")
-        last_updated_date = extract_last_updated_date(html_content)
-        
-        # Determine if we should fetch a new snapshot
-        should_fetch, reason = should_fetch_new_snapshot(last_updated_date, latest_snapshot_date)
-
-        # Backfill logic: If we do not have a file for the website's last updated date,
-        # fetch to backfill even if the latest snapshot filename date is newer (mislabeled prior run)
-        if (not should_fetch) and (last_updated_date is not None) and (last_updated_date not in existing_snapshot_dates):
-            should_fetch = True
-            reason = f"Missing snapshot file for website's last updated date ({last_updated_date}); fetching to backfill"
-        print(f"--- Decision: {'FETCH' if should_fetch else 'SKIP'} - {reason} ---")
-
-        # Parse current HTML to DataFrame for content comparison and potential save
-        df_current = parse_leaderboard_from_html(html_content)
-        if df_current is None or df_current.empty:
-            print("Current DataFrame is empty or None. Not saving snapshot.")
-            return
-
-        df_processed = process_lmsys_snapshot(df_current)
-        if df_processed is None or df_processed.empty:
-            print("Processed DataFrame is empty or None. Not saving snapshot.")
-            return
-
-        os.makedirs(DATA_DIR, exist_ok=True)
-        # Use the website's Last Updated date for the snapshot filename when available
-        snapshot_date_for_filename = last_updated_date if last_updated_date else date.today()
-        snapshot_date_str = snapshot_date_for_filename.strftime('%Y-%m-%d')
-        output_filename = FILENAME_TEMPLATE.format(snapshot_date_str)
-
-        # If we decided to fetch (new/backfill), save; if not, only update when content differs
-        if os.path.exists(output_filename):
-            try:
-                df_existing = pd.read_csv(output_filename)
-                if snapshots_differ(df_existing, df_processed):
-                    df_processed.to_csv(output_filename, index=False)
-                    print(f"Detected content change for {snapshot_date_str}; updated snapshot at {output_filename}")
-                else:
-                    print(f"No content change detected for {snapshot_date_str}; leaving existing snapshot as-is.")
-            except Exception as e:
-                print(f"Warning: Could not read existing snapshot for comparison due to error: {e}. Overwriting to be safe.")
-                df_processed.to_csv(output_filename, index=False)
-                print(f"Safely updated snapshot for {snapshot_date_str} at {output_filename}")
-        else:
-            # File does not exist yet; create it (backfill or first-time save)
-            df_processed.to_csv(output_filename, index=False)
-            print(f"Successfully created snapshot for {snapshot_date_str} at {output_filename}")
-    else:
-        print("Failed to fetch HTML content with all methods.")
 
 if __name__ == "__main__":
-    asyncio.run(main())
-
+    try:
+        main()
+    except Exception as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)

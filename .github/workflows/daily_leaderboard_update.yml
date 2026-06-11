@@ -1,61 +1,73 @@
-name: Daily Leaderboard Update and Visualization
+name: Daily Leaderboard Update and Deploy
 
 on:
   schedule:
     - cron: '0 4 * * *' # Runs every day at 04:00 UTC
+  push:
+    branches: [main]
+    paths: ['site/**', '.github/workflows/daily_leaderboard_update.yml']
   workflow_dispatch:
 
+permissions:
+  contents: write # commit new snapshots
+  pages: write    # deploy to GitHub Pages
+  id-token: write # required by actions/deploy-pages
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  update-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Necessary to commit changes
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for pull/rebase
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10' # Or your preferred version
+          python-version: '3.12'
 
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          # Install necessary libraries for both scripts
-          pip install pandas numpy plotly requests beautifulsoup4
-          
-      # Add crawl4ai and use crawl4ai-setup
-      - name: Install crawl4ai and run setup
-        run: |
-          pip install crawl4ai
-          crawl4ai-setup
-          # Install additional dependencies if needed
-          pip install asyncio
+          pip install -r requirements.txt
 
       - name: Fetch and Save Daily Snapshot
-        run: python fetch_daily_snapshot.py # Run the fetch script first
+        run: python fetch_daily_snapshot.py
 
-      - name: Generate Visualization from All Snapshots
-        run: python generate_visualization.py # Run the visualization script next
-
-      # Keep this step - it's still good practice, though force push might override its effect
-      - name: Pull latest changes from remote
-        run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'actions@github.com'
-          git pull --rebase || echo "Rebase failed or not needed, proceeding with commit." # Added fallback echo
-
-      - name: Commit and Push Changes
+      - name: Commit New Snapshot
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Automated update: Leaderboard snapshot and index.html"
-          file_pattern: "index.html data/"
+          commit_message: "Automated update: daily leaderboard snapshot"
+          file_pattern: "data/"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
           commit_author: "GitHub Actions Bot <actions@github.com>"
-          # --- Add force push option ---
-          push_options: '--force'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: site/package-lock.json
+
+      - name: Build Site
+        working-directory: site
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/out
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
