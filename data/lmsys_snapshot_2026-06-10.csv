@@ -60,15 +60,15 @@ glm-4.7,1442.56,Z.ai,MIT,12121,0.4,1.75,202752.0
 gpt-5.1,1438.74,OpenAI,Proprietary,43470,1.25,10.0,400000.0
 gemma-4-26b-a4b,1438.19,Google,Apache 2.0,5802,,,
 gpt-5.2-high,1437.52,OpenAI,Proprietary,47930,1.75,14.0,400000.0
-deepseek-v4-flash-thinking,1436.15,DeepSeek,MIT,24641,0.0983,0.1966,1048576.0
+deepseek-v4-flash-thinking,1436.15,DeepSeek,MIT,24641,0.098,0.196,1048576.0
 longcat-flash-chat-2602-exp,1435.46,Meituan,Proprietary,28117,,,
 qwen3-max-preview,1434.87,Alibaba,Proprietary,27716,0.78,3.9,262144.0
 gpt-5.2,1434.84,OpenAI,Proprietary,55819,1.75,14.0,400000.0
-deepseek-v4-flash,1434.03,DeepSeek,MIT,24760,0.0983,0.1966,1048576.0
+deepseek-v4-flash,1434.03,DeepSeek,MIT,24760,0.098,0.196,1048576.0
 gpt-5-high,1433.6,OpenAI,Proprietary,31932,1.25,10.0,400000.0
 mimo-v2.5,1432.54,Xiaomi,MIT,23774,0.14,0.28,1048576.0
 gemini-3.1-flash-lite-preview,1432.53,Google,Proprietary,44683,0.25,1.5,1048576.0
-kimi-k2.5-instant,1431.49,Moonshot,Modified MIT,8173,0.35,1.89,262144.0
+kimi-k2.5-instant,1431.49,Moonshot,Modified MIT,8173,0.4,1.9,262144.0
 o3-2025-04-16,1431.04,OpenAI,Proprietary,59750,2.0,8.0,200000.0
 grok-4-1-fast-reasoning,1430.88,xAI,Proprietary,56722,0.2,0.5,2000000.0
 kimi-k2-thinking-turbo,1429.96,Moonshot,Modified MIT,61974,1.15,8.0,262144.0
@@ -94,7 +94,7 @@ deepseek-v3.1,1417.5,DeepSeek,MIT,14960,1.23,4.94,
 kimi-k2-0711-preview,1417.39,Moonshot,Modified MIT,27639,0.6,2.5,131072.0
 qwen3.5-122b-a10b,1417.32,Alibaba,Apache 2.0,28441,0.26,2.08,262144.0
 deepseek-v3.1-thinking,1417.04,DeepSeek,MIT,11736,1.23,4.94,
-minimax-m2.7,1416.34,MiniMax,Modified MIT,31351,0.27,1.08,204800.0
+minimax-m2.7,1416.34,MiniMax,Modified MIT,31351,0.25,1.0,204800.0
 deepseek-v3.1-terminus,1416.21,DeepSeek,MIT,3705,0.27,0.95,163840.0
 amazon-nova-experimental-chat-26-01-10,1416.13,Amazon,Proprietary,3408,,,
 mistral-large-3,1415.59,Mistral,Apache 2.0,43471,0.5,1.5,
