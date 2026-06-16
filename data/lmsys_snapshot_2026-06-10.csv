@@ -60,11 +60,11 @@ glm-4.7,1442.56,Z.ai,MIT,12121,0.4,1.75,202752.0
 gpt-5.1,1438.74,OpenAI,Proprietary,43470,1.25,10.0,400000.0
 gemma-4-26b-a4b,1438.19,Google,Apache 2.0,5802,,,
 gpt-5.2-high,1437.52,OpenAI,Proprietary,47930,1.75,14.0,400000.0
-deepseek-v4-flash-thinking,1436.15,DeepSeek,MIT,24641,0.09,0.18,1048576.0
+deepseek-v4-flash-thinking,1436.15,DeepSeek,MIT,24641,0.098,0.196,1048576.0
 longcat-flash-chat-2602-exp,1435.46,Meituan,Proprietary,28117,,,
 qwen3-max-preview,1434.87,Alibaba,Proprietary,27716,0.78,3.9,262144.0
 gpt-5.2,1434.84,OpenAI,Proprietary,55819,1.75,14.0,400000.0
-deepseek-v4-flash,1434.03,DeepSeek,MIT,24760,0.09,0.18,1048576.0
+deepseek-v4-flash,1434.03,DeepSeek,MIT,24760,0.098,0.196,1048576.0
 gpt-5-high,1433.6,OpenAI,Proprietary,31932,1.25,10.0,400000.0
 mimo-v2.5,1432.54,Xiaomi,MIT,23774,0.14,0.28,1048576.0
 gemini-3.1-flash-lite-preview,1432.53,Google,Proprietary,44683,0.25,1.5,1048576.0
