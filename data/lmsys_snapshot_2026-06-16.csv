@@ -152,7 +152,7 @@ glm-4.5-air,1373.09,Z.ai,MIT,31077,0.13,0.85,131072.0
 claude-3-5-sonnet-20241022,1372.74,Anthropic,Proprietary,88337,3.0,15.0,200000.0
 claude-3-7-sonnet-20250219,1371.18,Anthropic,Proprietary,43185,3.0,15.0,200000.0
 qwen3-next-80b-a3b-thinking,1369.54,Alibaba,Apache 2.0,13693,0.0975,0.78,262144.0
-trinity-large-thinking,1368.77,Arcee AI,Apache 2.0,29305,0.22,0.85,262144.0
+trinity-large-thinking,1368.77,Arcee AI,Apache 2.0,29305,0.25,0.8,262144.0
 glm-4.7-flash,1367.9,Z.ai,MIT,11731,0.06,0.4,202752.0
 amazon-nova-experimental-chat-11-10,1366.81,Amazon,Proprietary,25383,,,
 gemma-3-27b-it,1365.75,Google,Gemma,47529,0.08,0.16,131072.0
