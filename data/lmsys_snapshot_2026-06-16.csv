@@ -205,7 +205,7 @@ qwen3-30b-a3b,1327.39,Alibaba,Apache 2.0,26486,0.12,0.5,131072.0
 llama-4-maverick-17b-128e-instruct,1326.97,Meta,Llama 4,39982,0.63,1.8,131072.0
 hunyuan-large-2025-02-10,1326.16,Tencent,Proprietary,3738,,,
 gpt-4-turbo-2024-04-09,1323.9,OpenAI,Proprietary,98114,10.0,30.0,128000.0
-claude-3-5-haiku-20241022,1323.55,Anthropic,Proprietary,69979,0.8,4.0,200000.0
+claude-3-5-haiku-20241022,1323.55,Anthropic,Proprietary,69979,1.0,5.0,200000.0
 gemini-1.5-pro-001,1323.48,Google,Proprietary,79138,3.5,10.5,2097152.0
 deepseek-v2.5-1210,1323.44,DeepSeek,DeepSeek,6795,,,
 llama-4-scout-17b-16e-instruct,1322.73,Meta,Llama,30286,0.4,0.7,8192.0
