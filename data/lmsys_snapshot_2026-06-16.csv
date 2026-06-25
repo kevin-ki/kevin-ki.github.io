@@ -67,7 +67,7 @@ qwen3-max-preview,1434.83,Alibaba,Proprietary,27716,0.78,3.9,262144.0
 gpt-5.2,1434.64,OpenAI,Proprietary,59625,1.75,14.0,400000.0
 deepseek-v4-flash,1433.85,DeepSeek,MIT,28291,0.09,0.18,1048576.0
 gpt-5-high,1433.57,OpenAI,Proprietary,31928,1.25,10.0,400000.0
-mimo-v2.5,1433.01,Xiaomi,MIT,27111,0.14,0.28,1048576.0
+mimo-v2.5,1433.01,Xiaomi,MIT,27111,0.105,0.28,1048576.0
 gemini-3.1-flash-lite-preview,1432.26,Google,Proprietary,48525,0.25,1.5,1048576.0
 mimo-v2-omni,1431.55,Xiaomi,Proprietary,12528,0.4,2.0,262144.0
 kimi-k2.5-instant,1431.49,Moonshot,Modified MIT,8177,0.375,2.025,262144.0
@@ -94,7 +94,7 @@ kimi-k2-0711-preview,1417.45,Moonshot,Modified MIT,27637,0.6,2.5,131072.0
 deepseek-v3.1,1417.39,DeepSeek,MIT,14958,1.23,4.94,
 qwen3.5-122b-a10b,1417.16,Alibaba,Apache 2.0,28575,0.26,2.08,262144.0
 deepseek-v3.1-thinking,1416.98,DeepSeek,MIT,11737,1.23,4.94,
-minimax-m2.7,1416.61,MiniMax,Modified MIT,34620,0.25,1.0,204800.0
+minimax-m2.7,1416.61,MiniMax,Modified MIT,34620,0.24,0.96,204800.0
 nvidia-nemotron-3-ultra-550b-a55b-nvfp4,1416.03,Nvidia,OpenMDW-1.1,6153,,,
 deepseek-v3.1-terminus,1416.02,DeepSeek,MIT,3702,0.27,0.95,163840.0
 amazon-nova-experimental-chat-26-01-10,1415.78,Amazon,Proprietary,3406,,,
@@ -269,7 +269,7 @@ command-r-plus,1261.0,Cohere,CC-BY-NC-4.0,77554,2.5,10.0,128000.0
 claude-3-haiku-20240307,1260.65,Anthropic,Proprietary,117701,0.25,1.25,200000.0
 amazon-nova-lite-v1.0,1260.32,Amazon,Proprietary,19372,0.06,0.24,300000.0
 gemini-1.5-flash-8b-001,1258.54,Google,Proprietary,35558,0.075,0.3,1048576.0
-phi-4,1255.96,Microsoft,MIT,24126,0.065,0.14,16384.0
+phi-4,1255.96,Microsoft,MIT,24126,0.07,0.14,16384.0
 olmo-2-0325-32b-instruct,1251.33,Ai2,Apache-2.0,3334,0.05,0.2,128000.0
 command-r-08-2024,1249.56,Cohere,CC-BY-NC-4.0,10140,0.15,0.6,128000.0
 mistral-large-2402,1241.59,Mistral,Proprietary,62436,4.0,12.0,32000.0
