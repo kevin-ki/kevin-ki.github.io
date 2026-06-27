@@ -109,7 +109,7 @@ claude-haiku-4-5-20251001,1411.28,Anthropic,Proprietary,96743,1.0,5.0,200000.0
 glm-4.5,1410.95,Z.ai,MIT,24302,0.6,2.2,131072.0
 gemini-2.5-flash,1410.37,Google,Proprietary,124489,0.3,2.5,1048576.0
 grok-4-0709,1409.73,xAI,Proprietary,41363,3.0,15.0,256000.0
-mistral-medium-2508,1409.62,Mistral,Proprietary,93957,2.7,8.1,32000.0
+mistral-medium-2508,1409.62,Mistral,Proprietary,93957,0.4,2.0,131072.0
 qwen3.5-27b,1408.88,Alibaba,Apache 2.0,27413,0.195,1.56,262144.0
 gemini-2.5-flash-preview-09-2025,1404.47,Google,Proprietary,32892,0.3,2.5,1048576.0
 grok-4-fast-reasoning,1403.92,xAI,Proprietary,18707,0.2,0.5,2000000.0
