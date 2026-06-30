@@ -126,7 +126,7 @@ qwen3.5-35b-a3b,1395.7,Alibaba,Apache 2.0,29232,0.14,1.0,262144.0
 qwen3-vl-235b-a22b-thinking,1395.64,Alibaba,Apache 2.0,7942,0.26,2.6,131072.0
 hunyuan-vision-1.5-thinking,1395.61,Tencent,Proprietary,2217,,,
 deepseek-v3-0324,1395.49,DeepSeek,MIT,45500,3.0,4.5,32768.0
-step-3.5-flash,1395.46,StepFun,Apache 2.0,49407,0.09,0.3,262144.0
+step-3.5-flash,1395.46,StepFun,Apache 2.0,49407,0.1,0.3,262144.0
 amazon-nova-experimental-chat-12-10,1394.5,Amazon,Proprietary,3675,,,
 mimo-v2-flash (non-thinking),1393.07,Xiaomi,MIT,46656,0.1,0.3,262144.0
 minimax-m2.5,1390.73,MiniMax,Modified MIT,41235,0.12,0.48,204800.0
