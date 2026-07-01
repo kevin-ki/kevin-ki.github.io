@@ -64,7 +64,7 @@ gemma-4-26b-a4b,1438.29,Google,Apache 2.0,5811,,,
 gpt-5.2-high,1437.49,OpenAI,Proprietary,48051,1.75,14.0,400000.0
 deepseek-v4-flash-thinking,1437.3,DeepSeek,MIT,33381,0.25,1.75,200000.0
 longcat-flash-chat-2602-exp,1435.7,Meituan,Proprietary,28173,,,
-deepseek-v4-flash,1435.14,DeepSeek,MIT,33456,0.09,0.18,1048576.0
+deepseek-v4-flash,1435.14,DeepSeek,MIT,33456,0.098,0.196,1048576.0
 gpt-5.2,1435.08,OpenAI,Proprietary,65237,1.75,14.0,400000.0
 qwen3-max-preview,1434.84,Alibaba,Proprietary,27708,0.78,3.9,262144.0
 gpt-5-high,1433.63,OpenAI,Proprietary,31926,1.25,10.0,400000.0
@@ -118,7 +118,7 @@ qwen3-235b-a22b-no-thinking,1403.1,Alibaba,Apache 2.0,38199,0.455,1.82,131072.0
 o1-2024-12-17,1401.95,OpenAI,Proprietary,27807,15.0,60.0,200000.0
 qwen3-next-80b-a3b-instruct,1401.49,Alibaba,Apache 2.0,22875,0.09,1.1,262144.0
 longcat-flash-chat,1401.04,Meituan,MIT,11392,0.2,0.8,131072.0
-qwen3-235b-a22b-thinking-2507,1399.32,Alibaba,Apache 2.0,8991,0.1,0.1,262144.0
+qwen3-235b-a22b-thinking-2507,1399.32,Alibaba,Apache 2.0,8991,0.1495,1.495,262144.0
 claude-sonnet-4-20250514-thinking-32k,1399.15,Anthropic,Proprietary,35101,3.0,15.0,1000000.0
 deepseek-r1,1398.06,DeepSeek,MIT,18524,0.7,2.5,163840.0
 qwen3.5-flash,1396.92,Alibaba,Proprietary,45836,,,
