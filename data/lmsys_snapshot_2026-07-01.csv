@@ -320,7 +320,7 @@ starling-lm-7b-beta,1170.5,Nexusflow,Apache-2.0,16056,,,
 phi-3-small-8k-instruct,1170.24,Microsoft,MIT,17766,0.15,0.6,
 llama-2-70b-chat,1169.88,Meta,Llama 2 Community,38492,0.7,2.8,4096.0
 starling-lm-7b-alpha,1166.57,UC Berkeley,CC-BY-NC-4.0,10224,,,
-llama-3.2-3b-instruct,1166.08,Meta,Llama 3.2,7936,0.0509,0.335,131072.0
+llama-3.2-3b-instruct,1166.08,Meta,Llama 3.2,7936,0.05,0.33,131072.0
 nous-hermes-2-mixtral-8x7b-dpo,1163.7,NousResearch,Apache-2.0,3777,0.9,0.9,
 granite-3.0-2b-instruct,1155.53,IBM,Apache 2.0,6837,,,
 qwq-32b-preview,1154.77,Alibaba,Apache 2.0,3231,0.5,1.0,16384.0
