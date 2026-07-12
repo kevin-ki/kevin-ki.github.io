@@ -68,7 +68,7 @@ glm-5v-turbo,1440.13,Z.ai,Proprietary,3358,1.2,4.0,202752.0
 gpt-5.1,1438.65,OpenAI,Proprietary,43434,1.25,10.0,400000.0
 deepseek-v4-flash-thinking,1438.55,DeepSeek,MIT,40631,0.25,1.75,200000.0
 gemma-4-26b-a4b,1438.1,Google,Apache 2.0,5806,,,
-deepseek-v4-flash,1437.38,DeepSeek,MIT,40831,0.084,0.168,1048576.0
+deepseek-v4-flash,1437.38,DeepSeek,MIT,40831,0.077,0.154,1048576.0
 gpt-5.2-high,1437.37,OpenAI,Proprietary,48012,1.75,14.0,400000.0
 longcat-flash-chat-2602-exp,1435.83,Meituan,Proprietary,28117,,,
 gpt-5.2,1435.43,OpenAI,Proprietary,73109,1.75,14.0,400000.0
