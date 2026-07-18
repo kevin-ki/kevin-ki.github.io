@@ -65,7 +65,7 @@ chatgpt-4o-latest-20250326,1443.1,OpenAI,Proprietary,82401,5.0,15.0,128000.0
 grok-4.3,1442.23,SpaceXAI,Proprietary,44059,1.25,2.5,1000000.0
 glm-4.7,1442.21,Z.ai,MIT,12098,0.4,1.75,202752.0
 qwen3.5-397b-a17b,1441.52,Alibaba,Apache 2.0,56154,0.39,2.34,262144.0
-inkling,1441.21,Thinky,Apache 2.0,1543,,,
+inkling,1441.21,Thinky,Apache 2.0,1543,1.0,4.05,1048576.0
 glm-5v-turbo,1439.11,Z.ai,Proprietary,5356,1.2,4.0,202752.0
 gpt-5.1,1438.65,OpenAI,Proprietary,43410,1.25,10.0,400000.0
 deepseek-v4-flash-thinking,1438.19,DeepSeek,MIT,42708,0.25,1.75,200000.0
@@ -162,7 +162,7 @@ claude-3-5-sonnet-20241022,1373.0,Anthropic,Proprietary,88319,3.0,15.0,200000.0
 claude-3-7-sonnet-20250219,1371.28,Anthropic,Proprietary,43165,3.0,15.0,200000.0
 qwen3-next-80b-a3b-thinking,1369.64,Alibaba,Apache 2.0,13680,0.0975,0.78,262144.0
 trinity-large-thinking,1369.23,,Apache 2.0,29175,0.25,0.8,262144.0
-glm-4.7-flash,1367.89,Z.ai,MIT,11713,0.06,0.4,202752.0
+glm-4.7-flash,1367.89,Z.ai,MIT,11713,0.0605,0.4,200000.0
 amazon-nova-experimental-chat-11-10,1366.4,Amazon,Proprietary,25333,,,
 gemma-3-27b-it,1365.76,Google,Gemma,47510,0.1,0.3,131072.0
 minimax-m1,1363.69,MiniMax,Apache 2.0,35159,0.55,2.2,1000000.0
