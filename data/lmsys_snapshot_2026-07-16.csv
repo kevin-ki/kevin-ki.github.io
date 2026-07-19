@@ -118,7 +118,7 @@ glm-4.5,1411.02,Z.ai,MIT,24292,0.6,2.2,131072.0
 gemini-2.5-flash,1410.28,Google,Proprietary,124363,0.3,2.5,1048576.0
 mistral-medium-2508,1409.66,Mistral,Proprietary,93847,0.4,2.0,131072.0
 grok-4-0709,1409.65,SpaceXAI,Proprietary,41343,3.0,15.0,256000.0
-qwen3.5-27b,1408.55,Alibaba,Apache 2.0,27347,0.195,1.56,262144.0
+qwen3.5-27b,1408.55,Alibaba,Apache 2.0,27347,0.26,2.6,262144.0
 gemini-2.5-flash-preview-09-2025,1404.24,Google,Proprietary,32888,0.3,2.5,1048576.0
 grok-4-fast-reasoning,1404.03,SpaceXAI,Proprietary,18710,0.2,0.5,2000000.0
 gpt-5.4-nano-high,1403.94,OpenAI,Proprietary,54399,0.2,1.25,400000.0
@@ -210,7 +210,7 @@ olmo-3.1-32b-instruct,1329.97,Ai2,Apache 2.0,12206,0.2,0.6,65536.0
 molmo-2-8b,1328.77,Ai2,Apache 2.0,798,0.2,0.2,36864.0
 yi-lightning,1328.31,,Proprietary,27332,,,
 llama-3.3-nemotron-49b-super-v1,1328.01,Nvidia,Nvidia,2218,,,
-qwen3-30b-a3b,1327.19,Alibaba,Apache 2.0,26472,0.12,0.5,131072.0
+qwen3-30b-a3b,1327.19,Alibaba,Apache 2.0,26472,0.13,0.52,131072.0
 llama-4-maverick-17b-128e-instruct,1327.01,Meta,Llama 4,39954,0.63,1.8,131072.0
 hunyuan-large-2025-02-10,1326.2,Tencent,Proprietary,3738,,,
 gpt-4-turbo-2024-04-09,1323.96,OpenAI,Proprietary,98114,10.0,30.0,128000.0
