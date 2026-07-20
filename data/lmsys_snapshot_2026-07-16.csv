@@ -189,7 +189,7 @@ qwen3-32b,1347.24,Alibaba,Apache 2.0,3926,0.08,0.28,131072.0
 mercury-2,1346.92,Inception AI,Proprietary,3119,0.25,0.75,128000.0
 ling-flash-2.0,1346.33,Ant Group,MIT,7000,,,
 qwen-plus-0125,1346.14,Alibaba,Proprietary,5819,0.4,1.2,131072.0
-minimax-m2,1345.99,MiniMax,Apache 2.0,6861,0.255,1.02,204800.0
+minimax-m2,1345.99,MiniMax,Apache 2.0,6861,0.3,1.2,204800.0
 gpt-4o-2024-05-13,1345.76,OpenAI,Proprietary,112881,5.0,15.0,128000.0
 nvidia-llama-3.3-nemotron-super-49b-v1.5,1343.13,Nvidia,Nvidia Open,3345,0.1,0.4,131072.0
 glm-4-plus-0111,1342.89,Z.ai,Proprietary,5760,,,
