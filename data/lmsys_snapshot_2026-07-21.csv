@@ -74,7 +74,7 @@ gemma-4-26b-a4b,1438.1,Google,Apache 2.0,5798,,,
 gpt-5.2-high,1437.4,OpenAI,Proprietary,47943,1.75,14.0,400000.0
 glm-5v-turbo,1436.74,Z.ai,Proprietary,7558,1.2,4.0,202752.0
 longcat-flash-chat-2602-exp,1435.75,Meituan,Proprietary,28070,,,
-deepseek-v4-flash,1435.5,DeepSeek,MIT,45050,0.0938,0.1876,1048576.0
+deepseek-v4-flash,1435.5,DeepSeek,MIT,45050,0.098,0.196,1048576.0
 qwen3-max-preview,1434.78,Alibaba,Proprietary,27702,0.78,3.9,262144.0
 gpt-5.2,1434.4,OpenAI,Proprietary,77656,1.75,14.0,400000.0
 gpt-5-high,1433.8,OpenAI,Proprietary,31898,1.25,10.0,400000.0
@@ -126,7 +126,7 @@ grok-4-fast-reasoning,1404.11,SpaceXAI,Proprietary,18709,0.2,0.5,2000000.0
 gpt-5.4-nano-high,1403.64,OpenAI,Proprietary,56761,0.2,1.25,400000.0
 qwen3-235b-a22b-no-thinking,1403.01,Alibaba,Apache 2.0,38174,0.455,1.8199999999999998,131072.0
 o1-2024-12-17,1402.05,OpenAI,Proprietary,27807,15.0,60.0,200000.0
-qwen3-next-80b-a3b-instruct,1401.19,Alibaba,Apache 2.0,22859,0.0975,0.78,262144.0
+qwen3-next-80b-a3b-instruct,1401.19,Alibaba,Apache 2.0,22859,0.1,1.1,262144.0
 longcat-flash-chat,1401.14,Meituan,MIT,11387,0.2,0.8,131072.0
 claude-sonnet-4-20250514-thinking-32k,1399.18,Anthropic,Proprietary,35078,3.0,15.0,1000000.0
 qwen3-235b-a22b-thinking-2507,1399.13,Alibaba,Apache 2.0,8985,0.3,3.0,262144.0
@@ -191,7 +191,7 @@ qwen3-32b,1347.2,Alibaba,Apache 2.0,3926,0.08,0.28,131072.0
 mercury-2,1346.73,Inception AI,Proprietary,3119,0.25,0.75,128000.0
 ling-flash-2.0,1346.25,Ant Group,MIT,6997,,,
 qwen-plus-0125,1346.13,Alibaba,Proprietary,5819,0.4,1.2,131072.0
-minimax-m2,1345.94,MiniMax,Apache 2.0,6862,0.3,1.2,204800.0
+minimax-m2,1345.94,MiniMax,Apache 2.0,6862,0.255,1.02,204800.0
 gpt-4o-2024-05-13,1345.8,OpenAI,Proprietary,112881,5.0,15.0,128000.0
 nvidia-llama-3.3-nemotron-super-49b-v1.5,1343.17,Nvidia,Nvidia Open,3344,0.1,0.4,131072.0
 glm-4-plus-0111,1342.87,Z.ai,Proprietary,5760,,,
