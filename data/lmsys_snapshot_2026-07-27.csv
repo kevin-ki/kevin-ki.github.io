@@ -32,6 +32,7 @@ grok-4.20-multi-agent-beta-0309,1471.02,SpaceXAI,Proprietary,60452,2.0,6.0,20000
 glm-5.2-max,1469.39,Z.ai,MIT,19995,1.4,4.4,1000000.0
 claude-opus-4-5-20251101,1468.77,Anthropic,Proprietary,70573,5.0,25.0,200000.0
 glm-5.1,1468.67,Z.ai,MIT,32555,1.4,4.4,202752.0
+gpt-5.6-terra-xhigh,1468.48,OpenAI,Proprietary,8621,,,
 grok-4.5,1467.8,SpaceXAI,Proprietary,9998,2.0,6.0,500000.0
 ernie-5.1,1467.79,Baidu,Proprietary,36892,,,
 grok-4.1-thinking,1466.11,SpaceXAI,Proprietary,65116,,,
@@ -53,6 +54,7 @@ claude-sonnet-4-5-20250929-thinking-32k,1455.58,Anthropic,Proprietary,81949,3.0,
 deepseek-v4-pro-thinking,1455.05,DeepSeek,MIT,44669,0.435,0.87,1048576.0
 claude-sonnet-4-5-20250929,1454.94,Anthropic,Proprietary,80347,3.0,15.0,200000.0
 gpt-5.1-high,1454.54,OpenAI,Proprietary,40700,0.625,5.0,400000.0
+gpt-5.6-luna-xhigh,1452.43,OpenAI,Proprietary,8890,,,
 gemma-4-31b,1451.14,Google,Apache 2.0,5841,0.14,0.4,262144.0
 kimi-k2.5-thinking,1450.01,Moonshot,Modified MIT,64226,0.6,3.0,
 claude-opus-4-1-20250805-thinking-16k,1449.1,Anthropic,Proprietary,49741,15.0,75.0,200000.0
@@ -132,7 +134,7 @@ o1-2024-12-17,1402.11,OpenAI,Proprietary,27807,15.0,60.0,200000.0
 qwen3-next-80b-a3b-instruct,1401.17,Alibaba,Apache 2.0,22846,0.1,1.1,262144.0
 longcat-flash-chat,1401.14,Meituan,MIT,11380,0.2,0.8,131072.0
 claude-sonnet-4-20250514-thinking-32k,1399.38,Anthropic,Proprietary,35053,3.0,15.0,1000000.0
-qwen3-235b-a22b-thinking-2507,1398.96,Alibaba,Apache 2.0,8983,0.3,3.0,262144.0
+qwen3-235b-a22b-thinking-2507,1398.96,Alibaba,Apache 2.0,8983,0.23,2.3,262144.0
 deepseek-r1,1398.13,DeepSeek,MIT,18524,0.7,2.5,163840.0
 qwen3.5-flash,1397.03,Alibaba,Proprietary,57925,,,
 qwen3-vl-235b-a22b-thinking,1395.56,Alibaba,Apache 2.0,7931,0.4,4.0,131072.0
@@ -380,3 +382,4 @@ fastchat-t5-3b,991.6,,Apache 2.0,4203,,,
 dolly-v2-12b,981.11,,MIT,3412,,,
 llama-13b,973.68,Meta,Non-commercial,2391,0.225,0.225,
 stablelm-tuned-alpha-7b,952.4,,CC-BY-NC-SA-4.0,3287,,,
+inkling-small,1430.54,Thinky,Apache 2.0,0,,,
