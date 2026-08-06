@@ -77,9 +77,9 @@ qwen3.5-397b-a17b,1441.68,Alibaba,Apache 2.0,61760,0.39,2.34,262144.0
 inkling,1440.8,Thinky,Apache 2.0,9873,1.0,4.05,1048576.0
 gpt-5.1,1438.67,OpenAI,Proprietary,43323,1.25,10.0,400000.0
 gemma-4-26b-a4b,1438.5,Google,Apache 2.0,5757,,,
-deepseek-v4-flash-high-preview,1438.01,DeepSeek,MIT,48387,0.14,0.28,1048576.0
+deepseek-v4-flash-high-preview,1438.01,DeepSeek,MIT,48387,0.0882,0.1764,1048576.0
 gpt-5.2-high,1437.48,OpenAI,Proprietary,47657,1.75,14.0,400000.0
-deepseek-v4-flash,1435.64,DeepSeek,MIT,48667,0.14,0.28,1048576.0
+deepseek-v4-flash,1435.64,DeepSeek,MIT,48667,0.0882,0.1764,1048576.0
 gpt-5.2,1435.32,OpenAI,Proprietary,78761,1.75,14.0,400000.0
 longcat-flash-chat-2602-exp,1435.22,Meituan,Proprietary,27736,,,
 qwen3-max-preview,1434.61,Alibaba,Proprietary,27692,0.78,3.9,262144.0
@@ -148,7 +148,7 @@ amazon-nova-experimental-chat-12-10,1393.49,Amazon,Proprietary,3673,,,
 mimo-v2-flash (non-thinking),1392.56,Xiaomi,MIT,46264,0.1,0.3,262144.0
 gpt-5-mini-high,1390.04,OpenAI,Proprietary,26998,0.25,2.0,400000.0
 o4-mini-2025-04-16,1390.02,OpenAI,Proprietary,45381,1.1,4.4,200000.0
-minimax-m2.5,1389.93,MiniMax,Modified MIT,40751,0.15,0.9,204800.0
+minimax-m2.5,1389.93,MiniMax,Modified MIT,40751,0.22,0.9,204800.0
 claude-sonnet-4-20250514,1389.27,Anthropic,Proprietary,40244,3.0,15.0,1000000.0
 o1-preview,1388.52,OpenAI,Proprietary,31122,15.0,60.0,
 qwen3-coder-480b-a35b-instruct,1387.71,Alibaba,Apache 2.0,25689,0.4,1.6,262144.0
@@ -384,4 +384,3 @@ fastchat-t5-3b,991.73,,Apache 2.0,4203,,,
 dolly-v2-12b,981.3,,MIT,3412,,,
 llama-13b,973.91,Meta,Non-commercial,2391,0.225,0.225,
 stablelm-tuned-alpha-7b,952.48,,CC-BY-NC-SA-4.0,3287,,,
-inkling-small,1430.54,Thinky,Apache 2.0,0,,,
