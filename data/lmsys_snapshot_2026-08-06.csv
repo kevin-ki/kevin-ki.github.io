@@ -113,7 +113,7 @@ deepseek-v3.1,1417.55,DeepSeek,MIT,14942,1.23,4.9399999999999995,
 deepseek-v3.1-terminus-thinking,1417.26,DeepSeek,MIT,3454,0.27,1.0,163840.0
 qwen3.5-122b-a10b,1416.94,Alibaba,Apache 2.0,28208,0.29,2.4,262144.0
 deepseek-v3.1-thinking,1416.87,DeepSeek,MIT,11715,1.23,4.9399999999999995,
-minimax-m2.7,1415.98,MiniMax,Modified MIT,55513,0.27,1.08,204800.0
+minimax-m2.7,1415.98,MiniMax,Modified MIT,55513,0.3,1.2,204800.0
 amazon-nova-experimental-chat-26-01-10,1415.36,Amazon,Proprietary,3392,,,
 mistral-large-3,1415.29,Mistral,Apache 2.0,56503,0.5,1.5,
 qwen3-vl-235b-a22b-instruct,1415.22,Alibaba,Apache 2.0,11483,0.21,1.9,262144.0
