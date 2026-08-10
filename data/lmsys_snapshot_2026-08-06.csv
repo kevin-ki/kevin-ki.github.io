@@ -71,7 +71,7 @@ gpt-4.5-preview-2025-02-27,1444.75,OpenAI,Proprietary,14547,75.0,150.0,128000.0
 minimax-m3,1444.67,MiniMax,MiniMax Community License,34343,0.6,2.4,
 qwen3.6-plus,1443.31,Alibaba,Proprietary,45033,0.325,1.95,1000000.0
 chatgpt-4o-latest-20250326,1443.1,OpenAI,Proprietary,82353,5.0,15.0,128000.0
-qwen3.5-397b-a17b,1442.16,Alibaba,Apache 2.0,63719,0.39,2.34,262144.0
+qwen3.5-397b-a17b,1442.16,Alibaba,Apache 2.0,63719,0.5,3.6,262144.0
 glm-4.7,1441.8,Z.ai,MIT,12077,0.4,1.75,204800.0
 grok-4.3,1441.6,SpaceXAI,Proprietary,53234,1.25,2.5,1000000.0
 inkling,1441.53,Thinky,Apache 2.0,12086,0.5,2.025,524288.0
