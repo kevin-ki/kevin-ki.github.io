@@ -2,3 +2,5 @@
 __pycache__/
 crawled_content.html
 .DS_Store
+.kilo
+.opencode
