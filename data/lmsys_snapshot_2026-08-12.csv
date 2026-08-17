@@ -224,7 +224,7 @@ olmo-3.1-32b-instruct,1329.47,Ai2,Apache 2.0,12274,0.2,0.6,65536.0
 molmo-2-8b,1329.0,Ai2,Apache 2.0,808,0.2,0.2,36864.0
 yi-lightning,1328.31,,Proprietary,27332,,,
 llama-3.3-nemotron-49b-super-v1,1327.99,Nvidia,Nvidia,2218,,,
-qwen3-30b-a3b,1327.09,Alibaba,Apache 2.0,26562,0.12,0.5,131072.0
+qwen3-30b-a3b,1327.09,Alibaba,Apache 2.0,26562,0.13,0.52,131072.0
 llama-4-maverick-17b-128e-instruct,1326.99,Meta,Llama 4,40064,0.63,1.8,131072.0
 hunyuan-large-2025-02-10,1326.29,Tencent,Proprietary,3738,,,
 gpt-4-turbo-2024-04-09,1324.18,OpenAI,Proprietary,98114,10.0,30.0,128000.0
