@@ -74,7 +74,7 @@ gemini-2.5-pro,1445.25,Google,Proprietary,124807,0.625,5.0,1048576.0
 gpt-4.5-preview-2025-02-27,1444.66,OpenAI,Proprietary,14547,75.0,150.0,128000.0
 qwen3.6-plus,1443.44,Alibaba,Proprietary,45376,0.325,1.95,1000000.0
 chatgpt-4o-latest-20250326,1442.71,OpenAI,Proprietary,82766,5.0,15.0,128000.0
-minimax-m3,1442.65,MiniMax,MiniMax Community License,41023,0.6,2.4,
+minimax-m3,1442.65,MiniMax,MiniMax Community License,41023,0.3,1.2,524288.0
 grok-4.3,1441.92,SpaceXAI,Proprietary,61016,1.25,2.5,1000000.0
 qwen3.5-397b-a17b,1441.8,Alibaba,Apache 2.0,70207,0.39,2.34,262144.0
 glm-4.7,1441.55,Z.ai,MIT,12155,0.4,1.75,204800.0
