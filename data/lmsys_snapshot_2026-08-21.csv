@@ -53,7 +53,7 @@ gemini-3-flash (thinking-minimal),1458.2,Google,Proprietary,86359,0.5,3.0,104857
 deepseek-v4-pro,1457.7,DeepSeek,MIT,54263,1.32,3.96,1048576.0
 qwen3.7-plus,1457.46,Alibaba,Proprietary,34426,0.32,1.28,1000000.0
 gemini-3.5-flash-lite,1457.16,Google,Proprietary,17985,0.15,1.25,1048576.0
-glm-5,1456.76,Z.ai,MIT,27850,1.0,3.2,202800.0
+glm-5,1456.76,Z.ai,MIT,27850,1.0,3.2,204800.0
 hy3,1456.71,Tencent,Apache 2.0,5877,0.132,0.528,262144.0
 dola-seed-2.0-pro,1455.85,Bytedance,Proprietary,74513,,,
 claude-sonnet-4-5-20250929-high-32k,1455.81,Anthropic,Proprietary,82473,3.0,15.0,200000.0
@@ -79,7 +79,7 @@ grok-4.3,1441.92,SpaceXAI,Proprietary,61016,1.25,2.5,1000000.0
 qwen3.5-397b-a17b,1441.8,Alibaba,Apache 2.0,70207,0.39,2.34,262144.0
 glm-4.7,1441.55,Z.ai,MIT,12155,0.4,1.75,204800.0
 inkling,1439.98,Thinky,Apache 2.0,18488,1.0,4.05,524288.0
-qwen3.8-27b,1439.67,Alibaba,Apache 2.0,3205,0.5,3.0,
+qwen3.8-27b,1439.67,Alibaba,Apache 2.0,3205,0.4,3.0,
 gpt-5.1,1438.64,OpenAI,Proprietary,43653,0.625,5.0,400000.0
 deepseek-v4-flash-high-preview,1438.26,DeepSeek,MIT,48679,0.44,1.32,1048576.0
 gemma-4-26b-a4b,1438.19,Google,Apache 2.0,5809,,,
@@ -130,7 +130,7 @@ claude-opus-4-20250514,1412.62,Anthropic,Proprietary,44326,15.0,75.0,200000.0
 hunyuan-hy3-preview,1412.47,Tencent,tencent-hunyuan-community,6617,0.29,1.17,262144.0
 grok-3-preview-02-24,1411.22,SpaceXAI,Proprietary,32941,3.0,15.0,131072.0
 glm-4.5,1411.05,Z.ai,MIT,24403,0.6,2.2,131072.0
-gemini-2.5-flash,1409.96,Google,Proprietary,124731,0.15,1.25,1048576.0
+gemini-2.5-flash,1409.96,Google,Proprietary,124731,0.3,2.5,1048576.0
 grok-4-0709,1409.13,SpaceXAI,Proprietary,41530,3.0,15.0,256000.0
 mistral-medium-2508,1408.86,Mistral,Proprietary,94016,0.4,2.0,131072.0
 qwen3.5-27b,1407.8,Alibaba,Apache 2.0,27282,0.195,1.56,262144.0
