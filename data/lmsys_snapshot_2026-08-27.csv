@@ -36,7 +36,7 @@ grok-4.20-beta-0309-reasoning,1471.74,SpaceXAI,Proprietary,62244,1.25,2.5,100000
 grok-4.20-multi-agent-beta-0309,1470.49,SpaceXAI,Proprietary,60845,1.25,2.5,1000000.0
 grok-4.5,1469.55,SpaceXAI,Proprietary,24152,2.0,6.0,500000.0
 claude-opus-4-5-20251101,1469.47,Anthropic,Proprietary,70044,5.0,25.0,200000.0
-glm-5.3-flash,1469.38,Z.ai,MIT,2424,0.075,0.25,1310720.0
+glm-5.3-flash,1469.38,Z.ai,MIT,2424,0.15,0.5,1048575.0
 ernie-5.1,1468.14,Baidu,Proprietary,37102,,,
 mimo-v2.5-pro,1467.67,Xiaomi,MIT,56020,0.435,0.87,1050000.0
 glm-5.1,1466.29,Z.ai,MIT,44023,1.4,4.4,202752.0
@@ -135,7 +135,7 @@ grok-4-0709,1410.89,SpaceXAI,Proprietary,39297,3.0,15.0,256000.0
 gemini-2.5-flash,1409.76,Google,Proprietary,122761,0.3,2.5,1048576.0
 mistral-medium-2508,1408.77,Mistral,Proprietary,92758,0.4,2.0,131072.0
 qwen3.5-27b,1407.95,Alibaba,Apache 2.0,27241,0.195,1.56,262144.0
-Inkling Small,1406.62,Thinky,Apache 2.0,13438,0.45,1.2,1048576.0
+Inkling Small,1406.62,Thinky,Apache 2.0,13438,0.5,1.2,524288.0
 grok-4-fast-reasoning,1404.56,SpaceXAI,Proprietary,17967,0.2,0.5,2000000.0
 gemini-2.5-flash-preview-09-2025,1403.52,Google,Proprietary,32360,0.3,2.5,1048576.0
 qwen3-235b-a22b-no-thinking,1402.4,Alibaba,Apache 2.0,37375,0.455,1.8199999999999998,131072.0
@@ -194,7 +194,7 @@ mistral-small-2506,1356.72,Mistral,Apache 2.0,17403,0.1,0.3,32000.0
 intellect-3,1356.06,,MIT,5284,0.2,1.1,131072.0
 command-a-03-2025,1353.56,Cohere,CC-BY-NC-4.0,55439,2.5,10.0,256000.0
 gemini-2.0-flash-lite-preview-02-05,1353.37,Google,Proprietary,24955,0.075,0.3,1048576.0
-gpt-oss-120b,1352.48,OpenAI,Apache 2.0,29938,0.037,0.17,131072.0
+gpt-oss-120b,1352.48,OpenAI,Apache 2.0,29938,0.15,0.6,131072.0
 glm-4.5v,1352.29,Z.ai,MIT,4819,0.6,1.8,65536.0
 gemini-1.5-pro-002,1350.99,Google,Proprietary,55606,3.5,10.5,2097152.0
 amazon-nova-experimental-chat-10-20,1349.73,Amazon,Proprietary,11362,,,
@@ -245,7 +245,7 @@ glm-4-plus,1319.2,Z.ai,Proprietary,26126,0.44,1.76,204800.0
 qwen-max-0919,1317.87,Alibaba,Qwen,16478,1.6,6.4,32768.0
 gpt-4o-mini-2024-07-18,1317.51,OpenAI,Proprietary,68698,0.15,0.6,128000.0
 llama-3.3-70b-instruct,1317.47,Meta,Llama-3.3,54416,0.71,0.71,131072.0
-gpt-oss-20b,1317.21,OpenAI,Apache 2.0,10385,0.03,0.13,131072.0
+gpt-oss-20b,1317.21,OpenAI,Apache 2.0,10385,0.05,0.2,131072.0
 gemma-3n-e4b-it,1317.2,Google,Gemma,22090,0.06,0.12,32768.0
 qwen2.5-plus-1127,1314.51,Alibaba,Proprietary,10187,,,
 nvidia-nemotron-3-nano-30b-a3b-bf16,1314.27,Nvidia,NVIDIA Open Model,15332,0.06,0.24,262144.0
