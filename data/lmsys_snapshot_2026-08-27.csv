@@ -96,7 +96,7 @@ gemini-3.1-flash-lite-preview,1432.38,Google,Proprietary,60482,0.25,1.5,1048576.
 o3-2025-04-16,1431.35,OpenAI,Proprietary,58575,2.0,8.0,200000.0
 kimi-k2.5-instant,1430.79,Moonshot,Modified MIT,7992,0.6,3.0,262144.0
 mimo-v2-omni,1430.37,Xiaomi,Proprietary,19421,0.4,2.0,262144.0
-grok-4-1-fast-reasoning,1430.29,SpaceXAI,Proprietary,55434,0.2,0.5,2000000.0
+grok-4-1-fast-reasoning,1430.29,SpaceXAI,Proprietary,55434,1.25,2.5,2000000.0
 kimi-k2-thinking-turbo,1430.21,Moonshot,Modified MIT,61120,1.15,8.0,262144.0
 mistral-medium-3.5,1427.09,Mistral,Modified MIT,11006,0.75,3.75,262144.0
 gpt-5-chat,1426.8,OpenAI,Proprietary,30967,1.25,10.0,
@@ -131,12 +131,12 @@ claude-haiku-4-5-20251001,1413.19,Anthropic,Proprietary,123321,1.0,5.0,200000.0
 hunyuan-hy3-preview,1412.95,Tencent,tencent-hunyuan-community,6611,0.29,1.17,262144.0
 grok-3-preview-02-24,1411.48,SpaceXAI,Proprietary,32407,3.0,15.0,131072.0
 glm-4.5,1411.31,Z.ai,MIT,23710,0.6,2.2,131072.0
-grok-4-0709,1410.89,SpaceXAI,Proprietary,39297,3.0,15.0,256000.0
+grok-4-0709,1410.89,SpaceXAI,Proprietary,39297,1.25,2.5,256000.0
 gemini-2.5-flash,1409.76,Google,Proprietary,122761,0.3,2.5,1048576.0
 mistral-medium-2508,1408.77,Mistral,Proprietary,92758,0.4,2.0,131072.0
 qwen3.5-27b,1407.95,Alibaba,Apache 2.0,27241,0.195,1.56,262144.0
 Inkling Small,1406.62,Thinky,Apache 2.0,13438,0.5,1.2,524288.0
-grok-4-fast-reasoning,1404.56,SpaceXAI,Proprietary,17967,0.2,0.5,2000000.0
+grok-4-fast-reasoning,1404.56,SpaceXAI,Proprietary,17967,1.25,2.5,2000000.0
 gemini-2.5-flash-preview-09-2025,1403.52,Google,Proprietary,32360,0.3,2.5,1048576.0
 qwen3-235b-a22b-no-thinking,1402.4,Alibaba,Apache 2.0,37375,0.455,1.8199999999999998,131072.0
 gpt-5.4-nano-high,1402.16,OpenAI,Proprietary,58539,0.2,1.25,400000.0
@@ -144,7 +144,7 @@ o1-2024-12-17,1402.0,OpenAI,Proprietary,27807,15.0,60.0,200000.0
 longcat-flash-chat,1401.46,Meituan,MIT,11166,0.2,0.8,131072.0
 claude-sonnet-4-20250514-thinking-32k,1400.68,Anthropic,Proprietary,33944,3.0,15.0,1000000.0
 qwen3-235b-a22b-thinking-2507,1400.03,Alibaba,Apache 2.0,8795,0.23,2.3,131072.0
-qwen3-next-80b-a3b-instruct,1399.27,Alibaba,Apache 2.0,22523,0.1,1.1,262144.0
+qwen3-next-80b-a3b-instruct,1399.27,Alibaba,Apache 2.0,22523,0.09,1.1,262144.0
 deepseek-r1,1398.01,DeepSeek,MIT,18524,0.7,2.5,64000.0
 qwen3.5-flash,1396.93,Alibaba,Proprietary,58255,,,
 deepseek-v3-0324,1395.63,DeepSeek,MIT,44789,3.0,4.5,32768.0
@@ -178,7 +178,7 @@ qwen2.5-max,1373.81,Alibaba,Proprietary,32418,,,
 claude-3-5-sonnet-20241022,1373.69,Anthropic,Proprietary,87693,3.0,15.0,200000.0
 glm-4.5-air,1373.26,Z.ai,MIT,30368,0.13,0.85,131072.0
 claude-3-7-sonnet-20250219,1371.9,Anthropic,Proprietary,42448,3.0,15.0,200000.0
-trinity-large-thinking,1369.18,,Apache 2.0,29001,0.22,0.85,262144.0
+trinity-large-thinking,1369.18,,Apache 2.0,29001,0.25,0.8,262144.0
 qwen3-next-80b-a3b-thinking,1369.11,Alibaba,Apache 2.0,13390,0.15,1.2,262144.0
 glm-4.7-flash,1366.37,Z.ai,MIT,11513,0.06,0.4,202752.0
 amazon-nova-experimental-chat-11-10,1365.18,Amazon,Proprietary,25098,,,
@@ -189,7 +189,7 @@ o3-mini-high,1363.36,OpenAI,Proprietary,18589,1.1,4.4,200000.0
 nvidia-nemotron-3-super-120b-a12b,1360.7,Nvidia,NVIDIA Open Model,7460,,,
 gemini-2.0-flash-001,1359.91,Google,Proprietary,43342,0.1,0.4,1048576.0
 deepseek-v3,1358.28,DeepSeek,DeepSeek,21770,1.1400000000000001,4.5600000000000005,
-grok-3-mini-beta,1357.79,SpaceXAI,Proprietary,20837,0.3,0.5,131072.0
+grok-3-mini-beta,1357.79,SpaceXAI,Proprietary,20837,1.25,2.5,131072.0
 mistral-small-2506,1356.72,Mistral,Apache 2.0,17403,0.1,0.3,32000.0
 intellect-3,1356.06,,MIT,5284,0.2,1.1,131072.0
 command-a-03-2025,1353.56,Cohere,CC-BY-NC-4.0,55439,2.5,10.0,256000.0
