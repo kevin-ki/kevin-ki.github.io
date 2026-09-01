@@ -146,6 +146,19 @@ def extract_snapshot(html: str):
     return df, cutoff_date
 
 
+def is_blank(value) -> bool:
+    """True when a cell holds nothing.
+
+    An empty string counts as blank, not as a value. arena returns an empty
+    organisation for some models, and pandas reads that back from CSV as NaN,
+    so treating the two as different made every run "fill" the same 50 cells
+    and commit the same file forever.
+    """
+    if pd.isna(value):
+        return True
+    return isinstance(value, str) and not value.strip()
+
+
 def values_agree(recorded, incoming) -> bool:
     """True when a recorded cell and an incoming one mean the same thing.
 
@@ -193,9 +206,9 @@ def merge_into_snapshot(existing: pd.DataFrame, fresh: pd.DataFrame):
             continue
         for column in columns:
             incoming = row[column]
-            if pd.isna(incoming):
+            if is_blank(incoming):
                 continue
-            if pd.isna(recorded[column]):
+            if is_blank(recorded[column]):
                 recorded[column] = incoming
                 filled += 1
             elif not values_agree(recorded[column], incoming):
