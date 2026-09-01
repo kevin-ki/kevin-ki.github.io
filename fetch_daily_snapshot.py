@@ -55,6 +55,7 @@ REQUEST_HEADERS = {
 }
 
 FLIGHT_CHUNK_RE = re.compile(r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*)"\]\)')
+SNAPSHOT_FILE_RE = re.compile(r"^lmsys_snapshot_\d{4}-\d{2}-\d{2}\.csv$")
 
 
 def decode_flight_payload(html: str) -> str:
@@ -96,12 +97,37 @@ def extract_json_value(blob: str, start: int):
     raise ValueError("Unbalanced brackets while extracting JSON value from flight payload")
 
 
-def extract_snapshot(html: str):
+def known_providers() -> dict[str, str]:
+    """Provider per model, taken from the newest snapshot that recorded one.
+
+    arena leaves modelOrganization empty for a stable set of about fifty older
+    models. Every one of them has a real organisation somewhere in the history
+    (vicuna-13b is LMSYS, jamba-1.5-large is AI21 Labs), so recovering the name
+    we already hold beats labelling it Unknown.
+    """
+    known: dict[str, str] = {}
+    if not os.path.isdir(DATA_DIR):
+        return known
+    files = sorted(
+        (f for f in os.listdir(DATA_DIR) if SNAPSHOT_FILE_RE.match(f)), reverse=True
+    )
+    for file in files:
+        frame = pd.read_csv(os.path.join(DATA_DIR, file))
+        if "Provider" not in frame.columns:
+            continue
+        for name, provider in zip(frame["Model_Name"], frame["Provider"]):
+            if not is_blank(provider) and not is_blank(name):
+                known.setdefault(name, provider)
+    return known
+
+
+def extract_snapshot(html: str, known_provider: dict[str, str] | None = None):
     """Extract the text leaderboard from page HTML.
 
     Returns (DataFrame with Model_Name/ELO_Score/Provider/License, cutoff_date).
     Raises ValueError if the expected payload structure is missing.
     """
+    known_provider = known_provider or {}
     blob = decode_flight_payload(html)
     if not blob:
         raise ValueError("No Next.js flight payload found in page HTML")
@@ -129,7 +155,11 @@ def extract_snapshot(html: str):
             {
                 "Model_Name": e["modelDisplayName"],
                 "ELO_Score": round(float(e["rating"]), 2),
-                "Provider": e["modelOrganization"],
+                "Provider": (
+                    e.get("modelOrganization")
+                    or known_provider.get(e["modelDisplayName"])
+                    or "Unknown"
+                ),
                 "License": e.get("license") or "Unknown",
                 "Votes": e.get("votes"),
                 "Input_Price": e.get("inputPricePerMillion"),
@@ -139,7 +169,9 @@ def extract_snapshot(html: str):
         )
     df = pd.DataFrame(rows)
 
-    incomplete = df[df["Model_Name"].isna() | df["Provider"].isna() | df["ELO_Score"].isna()]
+    # Blank-aware: an empty string passes isna(), which is how fifty empty
+    # provider names slipped through unnoticed for months.
+    incomplete = df[df["Model_Name"].map(is_blank) | df["ELO_Score"].map(is_blank)]
     if not incomplete.empty:
         raise ValueError(f"{len(incomplete)} entries have missing critical fields:\n{incomplete}")
 
@@ -252,7 +284,7 @@ def main():
     response = requests.get(LEADERBOARD_URL, headers=REQUEST_HEADERS, timeout=30)
     response.raise_for_status()
 
-    df, cutoff_date = extract_snapshot(response.text)
+    df, cutoff_date = extract_snapshot(response.text, known_providers())
     print(f"Extracted {len(df)} models, vote cutoff date {cutoff_date}")
 
     if len(df) < MIN_EXPECTED_MODELS:

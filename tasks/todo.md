@@ -101,9 +101,11 @@ back from CSV as NaN, so every run "filled" the same 50 cells and rewrote the
 file forever; a cell now counts as blank when it is NaN or whitespace. A run
 with nothing new to add reports unchanged and touches nothing.
 
-Open, not fixed: those 50 models genuinely have no provider in arena's
-payload, and the integrity check in extract_snapshot tests isna(), which an
-empty string passes. They sit between ELO 1328 and 1378, far below the top 30
-and the value floor, so nothing on the site shows a blank provider today.
-Worth deciding whether they should carry "Unknown" the way license already
-does.
+Fixed after that: arena leaves modelOrganization empty for 50 models, but
+every one of them has a real organisation recorded elsewhere in the history,
+so "Unknown" would have thrown away a name we already hold. The fetcher now
+recovers the provider from the newest snapshot that has one and falls back to
+"Unknown" only if no snapshot ever knew it, which today is never. 800 rows
+across 16 files were backfilled the same way. The integrity check in
+extract_snapshot is blank-aware now: it tested isna(), which an empty string
+passes, and that is how fifty empty providers went unnoticed for months.

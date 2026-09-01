@@ -161,7 +161,7 @@ qwen3-30b-a3b-instruct-2507,1383.05,Alibaba,Apache 2.0,23691,0.04815,0.19305,262
 gpt-4.1-mini-2025-04-14,1382.96,OpenAI,Proprietary,39277,0.4,1.6,1047576.0
 hunyuan-turbos-20250416,1382.31,Tencent,Proprietary,10715,,,
 gemini-2.5-flash-lite-preview-09-2025-no-thinking,1379.69,Google,Proprietary,47142,0.1,0.4,1048576.0
-trinity-large-preview,1378.55,,Apache 2.0,29651,0.15,0.45,131000.0
+trinity-large-preview,1378.55,Arcee AI,Apache 2.0,29651,0.15,0.45,131000.0
 glm-4.6v,1377.34,Z.ai,MIT,2797,0.3,0.9,131072.0
 qwen3-235b-a22b,1374.78,Alibaba,Apache 2.0,26241,0.455,1.8199999999999998,131072.0
 gemini-2.5-flash-lite-preview-06-17-thinking,1374.51,Google,Proprietary,32839,0.1,0.4,1048576.0
@@ -170,7 +170,7 @@ claude-3-5-sonnet-20241022,1373.39,Anthropic,Proprietary,88291,3.0,15.0,200000.0
 glm-4.5-air,1372.72,Z.ai,MIT,31040,0.13,0.85,131072.0
 claude-3-7-sonnet-20250219,1371.67,Anthropic,Proprietary,43140,3.0,15.0,200000.0
 qwen3-next-80b-a3b-thinking,1369.11,Alibaba,Apache 2.0,13661,0.15,1.2,262144.0
-trinity-large-thinking,1368.67,,Apache 2.0,28771,0.22,0.85,262144.0
+trinity-large-thinking,1368.67,Arcee AI,Apache 2.0,28771,0.22,0.85,262144.0
 glm-4.7-flash,1367.75,Z.ai,MIT,11678,0.06,0.4,202752.0
 amazon-nova-experimental-chat-11-10,1365.89,Amazon,Proprietary,25264,,,
 gemma-3-27b-it,1365.83,Google,Gemma,47453,0.08,0.45,262144.0
@@ -182,7 +182,7 @@ gemini-2.0-flash-001,1360.51,Google,Proprietary,43718,0.1,0.4,1048576.0
 deepseek-v3,1358.56,DeepSeek,DeepSeek,21770,1.1400000000000001,4.5600000000000005,
 mistral-small-2506,1357.56,Mistral,Apache 2.0,17685,0.1,0.3,32000.0
 grok-3-mini-beta,1356.63,SpaceXAI,Proprietary,22672,0.3,0.5,131072.0
-intellect-3,1356.17,,MIT,5323,0.2,1.1,131072.0
+intellect-3,1356.17,Prime Intellect,MIT,5323,0.2,1.1,131072.0
 command-a-03-2025,1353.92,Cohere,CC-BY-NC-4.0,56175,2.5,10.0,256000.0
 gemini-2.0-flash-lite-preview-02-05,1353.61,Google,Proprietary,24955,0.075,0.3,1048576.0
 glm-4.5v,1353.56,Z.ai,MIT,4953,0.6,1.8,65536.0
@@ -217,7 +217,7 @@ step-2-16k-exp-202412,1333.89,StepFun,Proprietary,4833,,,
 llama-3.1-405b-instruct-fp8,1333.19,Meta,Llama 3.1 Community,59656,4.0,4.0,32768.0
 olmo-3.1-32b-instruct,1329.69,Ai2,Apache 2.0,12195,0.2,0.6,65536.0
 molmo-2-8b,1328.91,Ai2,Apache 2.0,800,0.2,0.2,36864.0
-yi-lightning,1328.37,,Proprietary,27332,,,
+yi-lightning,1328.37,01 AI,Proprietary,27332,,,
 llama-3.3-nemotron-49b-super-v1,1328.06,Nvidia,Nvidia,2218,,,
 qwen3-30b-a3b,1327.33,Alibaba,Apache 2.0,26448,0.12,0.5,131072.0
 llama-4-maverick-17b-128e-instruct,1327.2,Meta,Llama 4,39928,0.63,1.8,131072.0
@@ -239,7 +239,7 @@ gpt-4o-mini-2024-07-18,1317.75,OpenAI,Proprietary,68707,0.15,0.6,128000.0
 gpt-oss-20b,1317.4,OpenAI,Apache 2.0,10618,0.03,0.13,131072.0
 nvidia-nemotron-3-nano-30b-a3b-bf16,1315.4,Nvidia,NVIDIA Open Model,15489,0.06,0.24,262144.0
 qwen2.5-plus-1127,1314.89,Alibaba,Proprietary,10187,,,
-athene-v2-chat,1314.33,,NexusFlow,24739,,,
+athene-v2-chat,1314.33,NexusFlow,NexusFlow,24739,,,
 mistral-large-2407,1314.19,Mistral,Mistral Research,45459,2.0,6.0,131072.0
 gpt-4-0125-preview,1312.89,OpenAI,Proprietary,93439,10.0,30.0,128000.0
 gpt-4-1106-preview,1312.48,OpenAI,Proprietary,100105,10.0,30.0,128000.0
@@ -247,7 +247,7 @@ hunyuan-standard-2025-02-10,1311.27,Tencent,Proprietary,3904,,,
 gemini-1.5-flash-002,1309.3,Google,Proprietary,34902,0.075,0.3,1048576.0
 grok-2-mini-2024-08-13,1308.56,SpaceXAI,Proprietary,52567,2.0,10.0,131072.0
 deepseek-v2.5,1307.2,DeepSeek,DeepSeek,24572,,,
-athene-70b-0725,1306.53,,CC-BY-NC-4.0,19621,,,
+athene-70b-0725,1306.53,NexusFlow,CC-BY-NC-4.0,19621,,,
 mercury,1306.07,Inception AI,Proprietary,1953,0.25,0.75,128000.0
 granite-4.1-8b,1305.83,IBM,Apache 2.0,3995,0.05,0.1,131072.0
 olmo-3-32b-think,1305.49,Ai2,Apache 2.0,5930,0.15,0.5,65536.0
@@ -260,9 +260,9 @@ llama-3.1-nemotron-70b-instruct,1299.04,Nvidia,Llama 3.1,7140,1.2,1.2,131072.0
 hunyuan-large-vision,1294.31,Tencent,Proprietary,5362,,,
 llama-3.1-70b-instruct,1293.31,Meta,Llama 3.1 Community,55240,0.4,0.4,131072.0
 amazon-nova-pro-v1.0,1290.12,Amazon,Proprietary,24745,0.8,3.2,300000.0
-jamba-1.5-large,1289.24,,Jamba Open,8662,2.0,8.0,256000.0
+jamba-1.5-large,1289.24,AI21 Labs,Jamba Open,8662,2.0,8.0,256000.0
 gemma-2-27b-it,1289.21,Google,Gemma license,75754,0.65,0.65,8192.0
-reka-core-20240904,1287.9,,Proprietary,7312,,,
+reka-core-20240904,1287.9,Reka AI,Proprietary,7312,,,
 ibm-granite-h-small,1287.27,IBM,Apache 2.0,5677,,,
 gpt-4-0314,1287.05,OpenAI,Proprietary,54173,30.0,60.0,8192.0
 gemini-1.5-flash-001,1286.4,Google,Proprietary,62833,0.075,0.3,1048576.0
@@ -270,14 +270,14 @@ llama-3.1-nemotron-51b-instruct,1286.16,Nvidia,Llama 3.1,3749,,,
 llama-3.1-tulu-3-70b,1286.04,Ai2,Llama 3.1,2846,,,
 olmo-3.1-32b-think,1285.21,Ai2,Apache 2.0,8485,0.15,0.5,65536.0
 claude-3-sonnet-20240229,1280.81,Anthropic,Proprietary,109284,3.0,15.0,200000.0
-gemma-2-9b-it-simpo,1280.16,,MIT,10072,0.03,0.09,8192.0
+gemma-2-9b-it-simpo,1280.16,Princeton,MIT,10072,0.03,0.09,8192.0
 nemotron-4-340b-instruct,1276.72,Nvidia,NVIDIA Open Model,19659,,,
 llama-3-70b-instruct,1276.19,Meta,Llama 3 Community,156876,0.51,0.74,8192.0
 command-r-plus-08-2024,1275.98,Cohere,CC-BY-NC-4.0,9866,2.5,10.0,128000.0
 gpt-4-0613,1275.35,OpenAI,Proprietary,88723,30.0,60.0,8192.0
 mistral-small-24b-instruct-2501,1274.24,Mistral,Apache 2.0,14681,0.05,0.08,32768.0
 glm-4-0520,1273.14,Z.ai,Proprietary,9788,,,
-reka-flash-20240904,1272.03,,Proprietary,7536,,,
+reka-flash-20240904,1272.03,Reka AI,Proprietary,7536,,,
 qwen2.5-coder-32b-instruct,1270.51,Alibaba,Apache 2.0,5432,0.87,0.87,32000.0
 c4ai-aya-expanse-32b,1267.08,Cohere,CC-BY-NC-4.0,27124,,,
 gemma-2-9b-it,1266.73,Google,Gemma license,54611,0.03,0.09,8192.0
@@ -292,15 +292,15 @@ olmo-2-0325-32b-instruct,1251.47,Ai2,Apache-2.0,3334,0.05,0.2,128000.0
 command-r-08-2024,1249.91,Cohere,CC-BY-NC-4.0,10140,0.15,0.6,128000.0
 mistral-large-2402,1241.95,Mistral,Proprietary,62436,4.0,12.0,32000.0
 amazon-nova-micro-v1.0,1240.69,Amazon,Proprietary,19364,0.035,0.14,128000.0
-jamba-1.5-mini,1239.57,,Jamba Open,8858,0.2,0.4,256000.0
+jamba-1.5-mini,1239.57,AI21 Labs,Jamba Open,8858,0.2,0.4,256000.0
 ministral-8b-2410,1237.46,Mistral,MRL,4781,0.1,0.1,131072.0
 gemini-pro-dev-api,1236.13,Google,Proprietary,18354,0.35,1.05,32760.0
 qwen1.5-110b-chat,1233.71,Alibaba,Qianwen LICENSE,26195,,,
 hunyuan-standard-256k,1233.28,Tencent,Proprietary,2728,,,
-reka-flash-21b-20240226-online,1233.03,,Proprietary,15450,,,
+reka-flash-21b-20240226-online,1233.03,Reka AI,Proprietary,15450,,,
 qwen1.5-72b-chat,1232.95,Alibaba,Qianwen LICENSE,39302,,,
 mixtral-8x22b-instruct-v0.1,1228.97,Mistral,Apache 2.0,51416,0.9,0.9,65536.0
-reka-flash-21b-20240226,1226.31,,Proprietary,24806,,,
+reka-flash-21b-20240226,1226.31,Reka AI,Proprietary,24806,,,
 command-r,1226.29,Cohere,CC-BY-NC-4.0,54036,0.15,0.6,128000.0
 gpt-3.5-turbo-0125,1224.61,OpenAI,Proprietary,66207,0.5,1.5,16385.0
 llama-3-8b-instruct,1223.23,Meta,Llama 3 Community,104642,0.14,0.14,8192.0
@@ -308,8 +308,8 @@ c4ai-aya-expanse-8b,1222.99,Cohere,CC-BY-NC-4.0,9818,,,
 gemini-pro,1222.83,Google,Proprietary,6390,0.35,1.05,32760.0
 mistral-medium,1222.19,Mistral,Proprietary,34550,2.7,8.1,32000.0
 llama-3.1-tulu-3-8b,1220.51,Ai2,Llama 3.1,2896,,,
-yi-1.5-34b-chat,1212.62,,Apache-2.0,24146,,,
-zephyr-orpo-141b-A35b-v0.1,1212.4,,Apache 2.0,4652,,,
+yi-1.5-34b-chat,1212.62,01 AI,Apache-2.0,24146,,,
+zephyr-orpo-141b-A35b-v0.1,1212.4,HuggingFace,Apache 2.0,4652,,,
 llama-3.1-8b-instruct,1211.36,Meta,Llama 3.1 Community,49605,0.05,0.08,131072.0
 granite-3.1-8b-instruct,1208.04,IBM,Apache 2.0,3090,,,
 qwen1.5-32b-chat,1203.4,Alibaba,Qianwen LICENSE,21741,,,
@@ -317,71 +317,71 @@ gpt-3.5-turbo-1106,1203.14,OpenAI,Proprietary,16619,1.0,2.0,16385.0
 gemma-2-2b-it,1200.06,Google,Gemma license,46616,,,
 phi-3-medium-4k-instruct,1197.39,Microsoft,MIT,25055,0.17,0.68,
 mixtral-8x7b-instruct-v0.1,1196.57,Mistral,Apache 2.0,73503,0.63,0.63,32000.0
-dbrx-instruct-preview,1194.8,,DBRX LICENSE,32191,0.6,0.6,32768.0
-internlm2_5-20b-chat,1190.65,,Other,9901,0.0,0.0,32768.0
+dbrx-instruct-preview,1194.8,Databricks,DBRX LICENSE,32191,0.6,0.6,32768.0
+internlm2_5-20b-chat,1190.65,InternLM,Other,9901,0.0,0.0,32768.0
 qwen1.5-14b-chat,1190.55,Alibaba,Qianwen LICENSE,17839,0.3,0.3,
 deepseek-llm-67b-chat,1184.18,DeepSeek,DeepSeek License,4932,,,
 wizardlm-70b,1184.17,Microsoft,Llama 2 Community,8214,,,
-yi-34b-chat,1183.32,,Yi License,15483,0.9,0.9,4096.0
+yi-34b-chat,1183.32,01 AI,Yi License,15483,0.9,0.9,4096.0
 granite-3.0-8b-instruct,1182.36,IBM,Apache 2.0,6638,,,
-openchat-3.5,1182.24,,Apache-2.0,7968,0.2,0.2,
-openchat-3.5-0106,1182.05,,Apache-2.0,12637,,,
+openchat-3.5,1182.24,OpenChat,Apache-2.0,7968,0.2,0.2,
+openchat-3.5-0106,1182.05,OpenChat,Apache-2.0,12637,,,
 gemma-1.1-7b-it,1181.97,Google,Gemma license,23893,0.03,0.09,8192.0
-snowflake-arctic-instruct,1179.31,,Apache 2.0,32832,,,
+snowflake-arctic-instruct,1179.31,Snowflake,Apache 2.0,32832,,,
 granite-3.1-2b-instruct,1178.51,IBM,Apache 2.0,3188,,,
-tulu-2-dpo-70b,1177.17,,AI2 ImpACT Low-risk,6535,,,
-openhermes-2.5-mistral-7b,1175.18,,Apache-2.0,5006,0.17,0.17,
-vicuna-33b,1172.33,,Non-commercial,22479,0.0,0.0,2048.0
-starling-lm-7b-beta,1170.71,,Apache-2.0,16056,,,
+tulu-2-dpo-70b,1177.17,AllenAI/UW,AI2 ImpACT Low-risk,6535,,,
+openhermes-2.5-mistral-7b,1175.18,NousResearch,Apache-2.0,5006,0.17,0.17,
+vicuna-33b,1172.33,LMSYS,Non-commercial,22479,0.0,0.0,2048.0
+starling-lm-7b-beta,1170.71,Nexusflow,Apache-2.0,16056,,,
 phi-3-small-8k-instruct,1170.57,Microsoft,MIT,17766,0.15,0.6,
 llama-2-70b-chat,1170.19,Meta,Llama 2 Community,38492,0.7,2.8,4096.0
-starling-lm-7b-alpha,1166.9,,CC-BY-NC-4.0,10224,,,
+starling-lm-7b-alpha,1166.9,UC Berkeley,CC-BY-NC-4.0,10224,,,
 llama-3.2-3b-instruct,1166.4,Meta,Llama 3.2,7936,0.05,0.33,131072.0
-nous-hermes-2-mixtral-8x7b-dpo,1163.98,,Apache-2.0,3777,0.9,0.9,
+nous-hermes-2-mixtral-8x7b-dpo,1163.98,NousResearch,Apache-2.0,3777,0.9,0.9,
 granite-3.0-2b-instruct,1155.99,IBM,Apache 2.0,6837,,,
 qwq-32b-preview,1154.54,Alibaba,Apache 2.0,3231,0.5,1.0,16384.0
 llama2-70b-steerlm-chat,1154.17,Nvidia,Llama 2 Community,3585,,,
-solar-10.7b-instruct-v1.0,1151.79,,CC-BY-NC-4.0,4155,0.3,0.3,
-dolphin-2.2.1-mistral-7b,1151.63,,Apache-2.0,1679,0.5,0.5,16384.0
-mpt-30b-chat,1150.0,,CC-BY-NC-SA-4.0,2572,,,
+solar-10.7b-instruct-v1.0,1151.79,Upstage AI,CC-BY-NC-4.0,4155,0.3,0.3,
+dolphin-2.2.1-mistral-7b,1151.63,Cognitive Computations,Apache-2.0,1679,0.5,0.5,16384.0
+mpt-30b-chat,1150.0,MosaicML,CC-BY-NC-SA-4.0,2572,,,
 wizardlm-13b,1148.87,Microsoft,Llama 2 Community,7044,0.3,0.3,
 mistral-7b-instruct-v0.2,1148.87,Mistral,Apache-2.0,19402,0.2,0.2,32768.0
-falcon-180b-chat,1147.23,,Falcon-180B TII License,1295,,,
+falcon-180b-chat,1147.23,TII,Falcon-180B TII License,1295,,,
 qwen1.5-7b-chat,1143.36,Alibaba,Qianwen LICENSE,4737,0.2,0.2,
 phi-3-mini-4k-instruct-june-2024,1142.6,Microsoft,MIT,12297,0.13,0.52,4096.0
 llama-2-13b-chat,1140.97,Meta,Llama 2 Community,19174,0.25,0.25,4096.0
-vicuna-13b,1140.78,,Llama 2 Community,19367,0.3,0.3,
+vicuna-13b,1140.78,LMSYS,Llama 2 Community,19367,0.3,0.3,
 qwen-14b-chat,1138.52,Alibaba,Qianwen LICENSE,4964,,,
 palm-2,1138.11,Google,Proprietary,8554,0.5,0.5,25804.0
 gemma-7b-it,1137.16,Google,Gemma license,8925,0.05,0.08,8192.0
 codellama-34b-instruct,1136.23,Meta,Llama 2 Community,7366,0.35,1.4,16384.0
-zephyr-7b-beta,1130.26,,MIT,11118,0.15,0.15,16384.0
+zephyr-7b-beta,1130.26,HuggingFace,MIT,11118,0.15,0.15,16384.0
 phi-3-mini-128k-instruct,1129.12,Microsoft,MIT,20685,0.13,0.52,
 phi-3-mini-4k-instruct,1127.67,Microsoft,MIT,20118,0.13,0.52,
-guanaco-33b,1126.81,,Non-commercial,2921,,,
-zephyr-7b-alpha,1126.32,,MIT,1785,,,
-stripedhyena-nous-7b,1120.84,,Apache 2.0,5182,0.2,0.2,
+guanaco-33b,1126.81,UW,Non-commercial,2921,,,
+zephyr-7b-alpha,1126.32,HuggingFace,MIT,1785,,,
+stripedhyena-nous-7b,1120.84,Together AI,Apache 2.0,5182,0.2,0.2,
 codellama-70b-instruct,1118.69,Meta,Llama 2 Community,1143,0.7,2.8,16384.0
 gemma-1.1-2b-it,1116.0,Google,Gemma license,10854,,,
-vicuna-7b,1114.53,,Llama 2 Community,6923,0.2,0.2,
-smollm2-1.7b-instruct,1114.09,,Apache 2.0,2199,,,
+vicuna-7b,1114.53,LMSYS,Llama 2 Community,6923,0.2,0.2,
+smollm2-1.7b-instruct,1114.09,HuggingFace,Apache 2.0,2199,,,
 llama-3.2-1b-instruct,1110.73,Meta,Llama 3.2,8045,0.027,0.201,60000.0
 mistral-7b-instruct,1109.55,Mistral,Apache 2.0,8977,0.07,0.28,4096.0
 llama-2-7b-chat,1107.5,Meta,Llama 2 Community,14148,0.15,0.15,4096.0
 gemma-2b-it,1092.98,Google,Gemma license,4780,0.1,0.1,
 qwen1.5-4b-chat,1090.24,Alibaba,Qianwen LICENSE,7597,0.1,0.1,
 olmo-7b-instruct,1073.3,Ai2,Apache-2.0,6328,0.2,0.2,
-koala-13b,1070.2,,Non-commercial,6965,,,
-alpaca-13b,1068.89,,Non-commercial,5745,,,
-gpt4all-13b-snoozy,1066.65,,Non-commercial,1743,,,
-mpt-7b-chat,1062.43,,CC-BY-NC-SA-4.0,3924,,,
-chatglm3-6b,1055.78,,Apache-2.0,4658,,,
-RWKV-4-Raven-14B,1041.48,,Apache 2.0,4845,,,
-chatglm2-6b,1023.98,,Apache-2.0,2658,,,
-oasst-pythia-12b,1022.52,,Apache 2.0,6310,,,
-chatglm-6b,995.14,,Non-commercial,4914,,,
-fastchat-t5-3b,991.69,,Apache 2.0,4203,,,
-dolly-v2-12b,981.24,,MIT,3412,,,
+koala-13b,1070.2,UC Berkeley,Non-commercial,6965,,,
+alpaca-13b,1068.89,Stanford,Non-commercial,5745,,,
+gpt4all-13b-snoozy,1066.65,Nomic AI,Non-commercial,1743,,,
+mpt-7b-chat,1062.43,MosaicML,CC-BY-NC-SA-4.0,3924,,,
+chatglm3-6b,1055.78,Tsinghua,Apache-2.0,4658,,,
+RWKV-4-Raven-14B,1041.48,RWKV,Apache 2.0,4845,,,
+chatglm2-6b,1023.98,Tsinghua,Apache-2.0,2658,,,
+oasst-pythia-12b,1022.52,OpenAssistant,Apache 2.0,6310,,,
+chatglm-6b,995.14,Tsinghua,Non-commercial,4914,,,
+fastchat-t5-3b,991.69,LMSYS,Apache 2.0,4203,,,
+dolly-v2-12b,981.24,Databricks,MIT,3412,,,
 llama-13b,973.85,Meta,Non-commercial,2391,0.225,0.225,
-stablelm-tuned-alpha-7b,952.45,,CC-BY-NC-SA-4.0,3287,,,
+stablelm-tuned-alpha-7b,952.45,Stability AI,CC-BY-NC-SA-4.0,3287,,,
 inkling-small,1430.54,Thinky,Apache 2.0,0,,,
