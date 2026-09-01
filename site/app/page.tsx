@@ -213,7 +213,16 @@ export default function Page() {
               <span className="font-medium text-fg">{leader.model}</span>, the
               current number one by arena score. Models more than 5% behind
               the leader&apos;s score are not considered, cheap but too far
-              back. Output price per million tokens; models without price data
+              back. Prices are blended per million tokens, three parts output
+              to one part input, since neither number alone is what a model
+              costs to run. They come from OpenRouter for{" "}
+              <span className="font-mono text-fg">
+                {scatter.openrouterCount}
+              </span>{" "}
+              of {scatter.pricedCount} priced models and from arena.ai for the
+              rest, because arena&apos;s figures go stale and read half the
+              list price for a recurring set of models. Models without price
+              data
               {zeroPriced > 0
                 ? ` (and ${zeroPriced} zero-priced models)`
                 : ""}{" "}

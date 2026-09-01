@@ -7,9 +7,15 @@ rendered HTML table: it carries clean fields (modelDisplayName,
 modelOrganization, license, full-precision rating) and the official data date
 (voteCutoffISOString), and it is far more stable than the page markup.
 
+arena's own price columns are kept as-is and OpenRouter's prices are joined
+on alongside them (see fetch_openrouter_prices), because arena's numbers go
+stale and disagree with providers' list prices for a sizeable minority of
+models. Nothing is overwritten, so the switch stays auditable in the history.
+
 Snapshots are named data/lmsys_snapshot_<voteCutoffDate>.csv. Every failure
 path exits non-zero so the GitHub Actions run turns red instead of silently
-producing nothing.
+producing nothing. That includes the OpenRouter join: a missed day is
+recoverable, a snapshot with a silently missing price source is not.
 """
 
 import json
@@ -20,6 +26,13 @@ from datetime import datetime
 
 import pandas as pd
 import requests
+
+from fetch_openrouter_prices import (
+    attach_openrouter_prices,
+    build_price_index,
+    fetch_openrouter_models,
+    report,
+)
 
 # --- Configuration ---
 LEADERBOARD_URL = "https://arena.ai/leaderboard/text"
@@ -167,6 +180,10 @@ def main():
             f"Only {len(df)} models extracted (expected >= {MIN_EXPECTED_MODELS}); "
             "refusing to save a suspiciously small snapshot"
         )
+
+    print("Fetching prices from OpenRouter")
+    df = attach_openrouter_prices(df, build_price_index(fetch_openrouter_models()))
+    print(report(df))
 
     result = save_snapshot(df, cutoff_date)
     print(result)

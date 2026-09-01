@@ -13,6 +13,10 @@ export interface ModelRow {
   inputPrice?: number;
   /** USD per million output tokens. */
   outputPrice?: number;
+  /** USD per million input tokens as published by OpenRouter, when matched. */
+  orInputPrice?: number;
+  /** USD per million output tokens as published by OpenRouter, when matched. */
+  orOutputPrice?: number;
   contextLength?: number;
 }
 
@@ -99,6 +103,8 @@ export const loadSnapshots = cache((): Snapshot[] => {
       votes: header.indexOf("Votes"),
       inputPrice: header.indexOf("Input_Price"),
       outputPrice: header.indexOf("Output_Price"),
+      orInputPrice: header.indexOf("OR_Input_Price"),
+      orOutputPrice: header.indexOf("OR_Output_Price"),
       contextLength: header.indexOf("Context_Length"),
     };
     if (optCol.outputPrice >= 0) enriched++;
@@ -127,6 +133,8 @@ export const loadSnapshots = cache((): Snapshot[] => {
         votes: optNum(line, optCol.votes),
         inputPrice: optNum(line, optCol.inputPrice),
         outputPrice: optNum(line, optCol.outputPrice),
+        orInputPrice: optNum(line, optCol.orInputPrice),
+        orOutputPrice: optNum(line, optCol.orOutputPrice),
         contextLength: optNum(line, optCol.contextLength),
       });
     }
@@ -308,24 +316,32 @@ export function buildBestOpenModels(snapshots: Snapshot[], topN = 5): OpenStandi
 
 /* ----------------------------- price vs performance ----------------------------- */
 
+export type PriceSource = "openrouter" | "arena";
+
 export interface ScatterPoint {
   model: string;
   provider: string;
   license: string;
   color: string;
   elo: number;
-  /** USD per million output tokens (always > 0 here, log-scale safe). */
+  /** Blended USD per million tokens; the number the ranking is built on. */
+  price: number;
+  /** USD per million output tokens behind the blend. */
   outputPrice: number;
-  /** USD per million input tokens, when known. */
-  inputPrice?: number;
+  /** USD per million input tokens behind the blend. */
+  inputPrice: number;
+  /** Which price list the pair came from. */
+  priceSource: PriceSource;
   /** On the Pareto frontier: no model is both cheaper and stronger. */
   frontier: boolean;
 }
 
 export interface PriceScatter {
   points: ScatterPoint[];
-  /** Latest-snapshot models that had any output price (incl. zero-priced). */
+  /** Latest-snapshot models that had a usable price pair (incl. zero-priced). */
   pricedCount: number;
+  /** How many of those were priced from OpenRouter rather than arena.ai. */
+  openrouterCount: number;
   /** Frontier models ordered by ascending price. */
   frontier: ScatterPoint[];
 }
@@ -337,23 +353,74 @@ export interface PriceScatter {
  */
 export const VALUE_QUALITY_FLOOR = 0.95;
 
+/**
+ * Weight of the output price against 1 part input in the blended price.
+ *
+ * Providers quote the two separately and output dominates a chat workload, so
+ * neither number alone is what a model costs to run. At 3:1 the frontier holds
+ * exactly the same models an output-only ranking produced, so the blend moves
+ * the numbers on the page, not who is on it. At 1:1 grok-4.20 drops out, which
+ * is why the weight is a constant and not a guess buried in a formula.
+ */
+export const BLEND_OUTPUT_WEIGHT = 3;
+
+interface EffectivePrice {
+  input: number;
+  output: number;
+  blended: number;
+  source: PriceSource;
+}
+
+/**
+ * The prices to rank a model on, preferring OpenRouter's over arena's.
+ *
+ * arena's price column goes stale (deepseek-v4-flash sat at a batch-tier price
+ * for weeks, 7x its real cost) and reports half the list price for a recurring
+ * set of models, so where the daily fetcher could match the model on
+ * OpenRouter we take that pair instead. Both halves must come from the same
+ * source: blending one price list's output with another's input would describe
+ * a model nobody can actually buy.
+ */
+function effectivePrice(row: ModelRow): EffectivePrice | undefined {
+  const candidates: [number | undefined, number | undefined, PriceSource][] = [
+    [row.orInputPrice, row.orOutputPrice, "openrouter"],
+    [row.inputPrice, row.outputPrice, "arena"],
+  ];
+  for (const [input, output, source] of candidates) {
+    if (input === undefined || output === undefined) continue;
+    return {
+      input,
+      output,
+      blended:
+        (BLEND_OUTPUT_WEIGHT * output + input) / (BLEND_OUTPUT_WEIGHT + 1),
+      source,
+    };
+  }
+  return undefined;
+}
+
 /** Price vs ELO for the latest snapshot, with the Pareto frontier marked. */
 export function buildPriceScatter(snapshots: Snapshot[]): PriceScatter {
   const providerColor = buildProviderColors(snapshots);
-  const priced = dedupedLatestRows(snapshots).filter(
-    (r) => r.outputPrice !== undefined,
-  );
+  const priced = dedupedLatestRows(snapshots)
+    .map((row) => ({ row, price: effectivePrice(row) }))
+    .filter(
+      (e): e is { row: ModelRow; price: EffectivePrice } =>
+        e.price !== undefined,
+    );
   // Zero-priced rows cannot sit on a log axis; drop them from the plot.
-  const plottable = priced.filter((r) => (r.outputPrice as number) > 0);
+  const plottable = priced.filter((e) => e.price.blended > 0);
 
-  const points: ScatterPoint[] = plottable.map((r) => ({
-    model: r.model,
-    provider: r.provider,
-    license: r.license,
-    color: providerColor.get(r.provider)!.color,
-    elo: r.elo,
-    outputPrice: r.outputPrice as number,
-    inputPrice: r.inputPrice,
+  const points: ScatterPoint[] = plottable.map(({ row, price }) => ({
+    model: row.model,
+    provider: row.provider,
+    license: row.license,
+    color: providerColor.get(row.provider)!.color,
+    elo: row.elo,
+    price: price.blended,
+    outputPrice: price.output,
+    inputPrice: price.input,
+    priceSource: price.source,
     frontier: false,
   }));
 
@@ -369,7 +436,7 @@ export function buildPriceScatter(snapshots: Snapshot[]): PriceScatter {
   // the frontier when it beats every cheaper model's ELO.
   const byPrice = points
     .filter((p) => p.elo >= floor)
-    .sort((a, b) => a.outputPrice - b.outputPrice || b.elo - a.elo);
+    .sort((a, b) => a.price - b.price || b.elo - a.elo);
   let bestElo = -Infinity;
   const frontier: ScatterPoint[] = [];
   for (const p of byPrice) {
@@ -380,7 +447,12 @@ export function buildPriceScatter(snapshots: Snapshot[]): PriceScatter {
     }
   }
 
-  return { points, pricedCount: priced.length, frontier };
+  return {
+    points,
+    pricedCount: priced.length,
+    openrouterCount: priced.filter((e) => e.price.source === "openrouter").length,
+    frontier,
+  };
 }
 
 /* ------------------------------ value for money ------------------------------ */
@@ -390,13 +462,17 @@ export interface ValueRow {
   provider: string;
   license: string;
   elo: number;
-  /** USD per million output tokens. */
+  /** Blended USD per million tokens; the number the ranking is built on. */
+  price: number;
+  /** USD per million output tokens behind the blend. */
   outputPrice: number;
-  /** USD per million input tokens, when arena.ai provides it. */
-  inputPrice?: number;
+  /** USD per million input tokens behind the blend. */
+  inputPrice: number;
+  /** Which price list the pair came from. */
+  priceSource: PriceSource;
   /** Percent of the leader's ELO this model reaches (0 to 100). */
   scorePct: number;
-  /** Percent of the leader's output price this model costs (0 to 100). */
+  /** Percent of the leader's blended price this model costs (0 to 100). */
   pricePct: number;
   isLeader: boolean;
 }
@@ -418,10 +494,12 @@ export function buildValueList(scatter: PriceScatter): ValueRow[] {
     provider: p.provider,
     license: p.license,
     elo: p.elo,
+    price: p.price,
     outputPrice: p.outputPrice,
     inputPrice: p.inputPrice,
+    priceSource: p.priceSource,
     scorePct: (p.elo / leader.elo) * 100,
-    pricePct: (p.outputPrice / leader.outputPrice) * 100,
+    pricePct: (p.price / leader.price) * 100,
     isLeader: p === leader,
   }));
 }

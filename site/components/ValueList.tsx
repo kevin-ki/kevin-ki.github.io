@@ -19,7 +19,9 @@ export function ValueList({ rows }: { rows: ValueRow[] }) {
         className="flex items-center gap-3 border-b border-cardborder py-3"
       >
         <span className="section-label flex-1">Cheapest first</span>
-        <span className="section-label w-24 text-right sm:w-28">Price $/M</span>
+        <span className="section-label w-28 text-right sm:w-36">
+          Blended $/M
+        </span>
         <span className="section-label w-12 text-right sm:w-14">ELO</span>
       </li>
       {rows.map((row, idx) => (
@@ -41,15 +43,13 @@ export function ValueList({ rows }: { rows: ValueRow[] }) {
             <span className="hidden md:inline-block">
               <LicensePill license={row.license} />
             </span>
-            <span className="ml-auto w-24 shrink-0 text-right sm:w-28">
+            <span className="ml-auto w-28 shrink-0 text-right sm:w-36">
               <span className="block font-mono text-sm text-fg">
-                {price(row.outputPrice)} out
+                {price(row.price)}
               </span>
-              {row.inputPrice !== undefined && (
-                <span className="block font-mono text-xs text-muted">
-                  {price(row.inputPrice)} in
-                </span>
-              )}
+              <span className="block font-mono text-xs text-muted">
+                {price(row.inputPrice)} in &middot; {price(row.outputPrice)} out
+              </span>
             </span>
             <span className="w-12 shrink-0 text-right font-mono text-sm text-fg sm:w-14">
               {Math.round(row.elo)}

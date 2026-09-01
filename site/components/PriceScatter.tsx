@@ -59,8 +59,8 @@ export function PriceScatter({ points }: PriceScatterProps) {
     let eLo = Infinity;
     let eHi = -Infinity;
     for (const p of points) {
-      if (p.outputPrice < pLo) pLo = p.outputPrice;
-      if (p.outputPrice > pHi) pHi = p.outputPrice;
+      if (p.price < pLo) pLo = p.price;
+      if (p.price > pHi) pHi = p.price;
       if (p.elo < eLo) eLo = p.elo;
       if (p.elo > eHi) eHi = p.elo;
     }
@@ -79,7 +79,7 @@ export function PriceScatter({ points }: PriceScatterProps) {
   }, [points, plotRight, plotBottom]);
 
   const positions = useMemo(
-    () => points.map((p) => ({ px: x(p.outputPrice), py: y(p.elo) })),
+    () => points.map((p) => ({ px: x(p.price), py: y(p.elo) })),
     [points, x, y],
   );
 
@@ -88,7 +88,7 @@ export function PriceScatter({ points }: PriceScatterProps) {
       points
         .map((p, i) => ({ p, i }))
         .filter(({ p }) => p.frontier)
-        .sort((a, b) => a.p.outputPrice - b.p.outputPrice),
+        .sort((a, b) => a.p.price - b.p.price),
     [points],
   );
 
@@ -175,7 +175,7 @@ export function PriceScatter({ points }: PriceScatterProps) {
         width={width}
         height={HEIGHT}
         role="img"
-        aria-label="Output price versus ELO for models in the latest snapshot"
+        aria-label="Blended price versus ELO for models in the latest snapshot"
         onPointerMove={handleMove}
         onPointerLeave={() => setHoverIdx(null)}
         className="block"
@@ -236,7 +236,7 @@ export function PriceScatter({ points }: PriceScatterProps) {
           fontSize={9}
           fill="#555555"
         >
-          output price, USD per million tokens (log scale)
+          blended price, USD per million tokens (log scale)
         </text>
 
         {/* frontier line under the dots */}
@@ -303,11 +303,15 @@ export function PriceScatter({ points }: PriceScatterProps) {
           <div className="mt-0.5 text-xs text-muted">{hover.p.provider}</div>
           <ul className="mt-2 space-y-1 border-t border-hairline pt-2">
             <li className="flex items-baseline justify-between gap-6">
+              <span className="text-xs text-muted">Blended</span>
+              <span className="font-mono text-xs text-fg">
+                {formatPrice(hover.p.price)} / M
+              </span>
+            </li>
+            <li className="flex items-baseline justify-between gap-6">
               <span className="text-xs text-muted">Input</span>
               <span className="font-mono text-xs text-fg">
-                {hover.p.inputPrice === undefined
-                  ? "n/a"
-                  : `${formatPrice(hover.p.inputPrice)} / M`}
+                {formatPrice(hover.p.inputPrice)} / M
               </span>
             </li>
             <li className="flex items-baseline justify-between gap-6">
