@@ -117,10 +117,10 @@ grok-4-fast-chat,1418.26,SpaceXAI,Proprietary,6331,3.0,15.0,256000.0,,,,none
 kimi-k2-0905-preview,1417.86,Moonshot,Modified MIT,11561,0.6,2.5,262144.0,,,,none
 kimi-k2-0711-preview,1417.63,Moonshot,Modified MIT,27023,0.6,2.5,131072.0,,,,none
 qwen3.5-122b-a10b,1417.3,Alibaba,Apache 2.0,28389,0.29,2.4,262144.0,0.29,2.4,qwen/qwen3.5-122b-a10b,exact
-deepseek-v3.1,1417.24,DeepSeek,MIT,14600,1.23,4.9399999999999995,,,,,none
+deepseek-v3.1,1417.24,DeepSeek,MIT,14600,1.23,4.94,,,,,none
 deepseek-v3.1-terminus-thinking,1417.03,DeepSeek,MIT,3367,0.27,1.0,163840.0,0.27,1.0,deepseek/deepseek-v3.1-terminus,effort
 minimax-m2.7,1416.55,MiniMax,Modified MIT,63907,0.3,1.2,204800.0,0.3,1.2,minimax/minimax-m2.7,exact
-deepseek-v3.1-thinking,1416.01,DeepSeek,MIT,11460,1.23,4.9399999999999995,,,,,none
+deepseek-v3.1-thinking,1416.01,DeepSeek,MIT,11460,1.23,4.94,,,,,none
 amazon-nova-experimental-chat-26-01-10,1414.89,Amazon,Proprietary,3351,,,,,,,none
 deepseek-v3.1-terminus,1414.53,DeepSeek,MIT,3612,0.27,1.0,163840.0,0.27,1.0,deepseek/deepseek-v3.1-terminus,exact
 gpt-4.1-2025-04-14,1414.49,OpenAI,Proprietary,49920,2.0,8.0,1047576.0,,,,none
