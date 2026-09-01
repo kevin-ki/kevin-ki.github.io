@@ -91,3 +91,19 @@ deterministic. Where arena is the only source and it flip-flops, the first
 observation stands and the disagreement shows up in the run log. The
 2026-08-27 file, the only one the old overwrite semantics damaged, was
 repaired by replaying the new rule over its first recorded version.
+
+Two bugs surfaced when the merge first ran against live data, both now fixed.
+Multiplying a per-token price by a million leaves representation noise, so a
+third of the reported conflicts were 1.027 against 1.0270000000000001; derived
+prices are rounded at the source and numbers are compared with a tolerance.
+And arena returns an empty modelOrganization for 50 models, which pandas reads
+back from CSV as NaN, so every run "filled" the same 50 cells and rewrote the
+file forever; a cell now counts as blank when it is NaN or whitespace. A run
+with nothing new to add reports unchanged and touches nothing.
+
+Open, not fixed: those 50 models genuinely have no provider in arena's
+payload, and the integrity check in extract_snapshot tests isna(), which an
+empty string passes. They sit between ELO 1328 and 1378, far below the top 30
+and the value floor, so nothing on the site shows a blank provider today.
+Worth deciding whether they should carry "Unknown" the way license already
+does.
