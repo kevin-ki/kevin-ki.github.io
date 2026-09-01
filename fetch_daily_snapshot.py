@@ -22,6 +22,8 @@ is recoverable, a snapshot with a silently missing price source is not.
 """
 
 import json
+import math
+import numbers
 import os
 import re
 import sys
@@ -144,6 +146,18 @@ def extract_snapshot(html: str):
     return df, cutoff_date
 
 
+def values_agree(recorded, incoming) -> bool:
+    """True when a recorded cell and an incoming one mean the same thing.
+
+    Numbers are compared with a tolerance. A price survives the CSV round trip
+    as a very slightly different double, and reporting 1.027 against
+    1.0270000000000001 as a conflict would bury the ones that matter.
+    """
+    if isinstance(recorded, numbers.Real) and isinstance(incoming, numbers.Real):
+        return math.isclose(float(recorded), float(incoming), rel_tol=1e-9)
+    return recorded == incoming
+
+
 def merge_into_snapshot(existing: pd.DataFrame, fresh: pd.DataFrame):
     """Fold a fresh fetch into an existing snapshot without rewriting history.
 
@@ -184,7 +198,7 @@ def merge_into_snapshot(existing: pd.DataFrame, fresh: pd.DataFrame):
             if pd.isna(recorded[column]):
                 recorded[column] = incoming
                 filled += 1
-            elif recorded[column] != incoming:
+            elif not values_agree(recorded[column], incoming):
                 conflicts.append((row["Model_Name"], column, recorded[column], incoming))
 
     merged = pd.DataFrame(list(on_record.values()), columns=columns)

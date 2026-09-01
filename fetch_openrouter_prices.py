@@ -47,6 +47,11 @@ OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
 REQUEST_TIMEOUT = 30
 # OpenRouter quotes USD per token; the leaderboard works in USD per million.
 PER_MILLION = 1_000_000
+# Decimals kept on a per-million price. Multiplying a per-token price by a
+# million leaves representation noise ($0.13199999999999998), which then reads
+# as a changed price on the next run. Six decimals is finer than any provider
+# publishes.
+PRICE_PRECISION = 6
 
 # Suffixes denoting reasoning effort, which never changes the per-token price.
 # Ordered longest first so "xhigh" is not mistaken for "high".
@@ -123,8 +128,8 @@ def build_price_index(models: list[dict]) -> dict[str, OpenRouterPrice]:
         try:
             entry = OpenRouterPrice(
                 model_id=model_id,
-                input_price=float(pricing["prompt"]) * PER_MILLION,
-                output_price=float(pricing["completion"]) * PER_MILLION,
+                input_price=round(float(pricing["prompt"]) * PER_MILLION, PRICE_PRECISION),
+                output_price=round(float(pricing["completion"]) * PER_MILLION, PRICE_PRECISION),
             )
         except (KeyError, TypeError, ValueError):
             continue
