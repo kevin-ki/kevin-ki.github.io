@@ -12,10 +12,13 @@ on alongside them (see fetch_openrouter_prices), because arena's numbers go
 stale and disagree with providers' list prices for a sizeable minority of
 models. Nothing is overwritten, so the switch stays auditable in the history.
 
-Snapshots are named data/lmsys_snapshot_<voteCutoffDate>.csv. Every failure
-path exits non-zero so the GitHub Actions run turns red instead of silently
-producing nothing. That includes the OpenRouter join: a missed day is
-recoverable, a snapshot with a silently missing price source is not.
+Snapshots are named data/lmsys_snapshot_<voteCutoffDate>.csv and are
+append-only: see merge_into_snapshot for why a rerun may fill blanks and add
+models but never rewrite a value already on record.
+
+Every failure path exits non-zero so the GitHub Actions run turns red instead
+of silently producing nothing. That includes the OpenRouter join: a missed day
+is recoverable, a snapshot with a silently missing price source is not.
 """
 
 import json
@@ -141,14 +144,62 @@ def extract_snapshot(html: str):
     return df, cutoff_date
 
 
-def snapshots_differ(df_a: pd.DataFrame, df_b: pd.DataFrame) -> bool:
-    if set(df_a.columns) != set(df_b.columns):
-        return True
-    cols = sorted(df_a.columns)
-    sort_keys = ["Model_Name", "Provider", "ELO_Score"]
-    a = df_a[cols].sort_values(sort_keys).reset_index(drop=True)
-    b = df_b[cols].sort_values(sort_keys).reset_index(drop=True)
-    return not a.equals(b)
+def merge_into_snapshot(existing: pd.DataFrame, fresh: pd.DataFrame):
+    """Fold a fresh fetch into an existing snapshot without rewriting history.
+
+    A snapshot records what arena published for one vote cutoff, and the cutoff
+    stays put for days, so several daily runs land on the same file. arena's
+    price field is not stable across those runs: the same model comes back at
+    the list price on one fetch and at exactly half on the next. Two fetches of
+    the 2026-08-27 cutoff disagreed on fifteen models, gemini-2.5-pro doubling
+    while gpt-5.1 and gpt-5.2 halved, with ELO and votes identical throughout.
+    Overwriting on every run therefore rewrote the record to whichever value
+    the last fetch happened to catch.
+
+    The merge is append-only at the cell level instead: a value already on
+    record is never changed, a blank cell may be filled, and a model arena adds
+    later joins as a new row. Models that disappear upstream stay. Conflicts
+    are reported rather than applied, and reported rather than raised, because
+    a flip-flopping upstream price is noise and not a failed run.
+
+    Returns (merged frame, summary lines, changed).
+    """
+    columns = list(dict.fromkeys([*existing.columns, *fresh.columns]))
+    existing = existing.reindex(columns=columns)
+    fresh = fresh.reindex(columns=columns)
+
+    on_record = {row["Model_Name"]: dict(row) for _, row in existing.iterrows()}
+    filled, added, conflicts = 0, 0, []
+
+    for _, row in fresh.iterrows():
+        recorded = on_record.get(row["Model_Name"])
+        if recorded is None:
+            on_record[row["Model_Name"]] = dict(row)
+            added += 1
+            continue
+        for column in columns:
+            incoming = row[column]
+            if pd.isna(incoming):
+                continue
+            if pd.isna(recorded[column]):
+                recorded[column] = incoming
+                filled += 1
+            elif recorded[column] != incoming:
+                conflicts.append((row["Model_Name"], column, recorded[column], incoming))
+
+    merged = pd.DataFrame(list(on_record.values()), columns=columns)
+    merged = merged.sort_values("ELO_Score", ascending=False).reset_index(drop=True)
+
+    summary = [f"merge: {added} models added, {filled} blank cells filled"]
+    if conflicts:
+        summary.append(
+            f"  {len(conflicts)} upstream values differ from the record and were kept as recorded:"
+        )
+        for name, column, recorded_value, incoming in conflicts[:5]:
+            summary.append(f"    {name} {column}: kept {recorded_value}, upstream now {incoming}")
+        if len(conflicts) > 5:
+            summary.append(f"    ... and {len(conflicts) - 5} more")
+    return merged, summary, bool(added or filled)
 
 
 def save_snapshot(df: pd.DataFrame, cutoff_date) -> str:
@@ -156,15 +207,17 @@ def save_snapshot(df: pd.DataFrame, cutoff_date) -> str:
     os.makedirs(DATA_DIR, exist_ok=True)
     path = FILENAME_TEMPLATE.format(cutoff_date.isoformat())
 
-    if os.path.exists(path):
-        existing = pd.read_csv(path)
-        if set(existing.columns) >= {"Model_Name", "ELO_Score", "Provider", "License"} and not snapshots_differ(existing, df):
-            return f"unchanged: {path} already matches today's data"
-        df.to_csv(path, index=False)
-        return f"updated: {path} (content changed for {cutoff_date})"
+    if not os.path.exists(path):
+        df.sort_values("ELO_Score", ascending=False).to_csv(path, index=False)
+        return f"created: {path} with {len(df)} models"
 
-    df.to_csv(path, index=False)
-    return f"created: {path}"
+    merged, summary, changed = merge_into_snapshot(pd.read_csv(path), df)
+    for line in summary:
+        print(line)
+    if not changed:
+        return f"unchanged: {path} already holds everything this fetch added"
+    merged.to_csv(path, index=False)
+    return f"updated: {path} ({len(merged)} models on record for {cutoff_date})"
 
 
 def main():

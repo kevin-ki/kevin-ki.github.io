@@ -51,3 +51,43 @@ frontier list with 95% floor + scatter). Deploy via Actions to Pages; user
 must flip Pages source to "GitHub Actions".
 
 Open follow-ups: none blocking. Optional: favicon/wordmark art, OG image.
+
+## 2026-09-01: Price source and snapshot immutability
+
+- [x] Join OpenRouter's published prices onto each snapshot (fetch_openrouter_prices.py)
+- [x] Rank the value frontier on a blended price, 3 parts output to 1 part input
+- [x] Make snapshots append-only so reruns stop rewriting the record
+
+## Review
+
+arena's price column is unreliable in two distinct ways. It goes stale:
+deepseek-v4-flash sat at a batch-tier price for weeks, 7x its real cost, which
+is what pushed it off the value list. And it is not stable across fetches: two
+pulls of the same 2026-08-27 cutoff disagreed on 15 models, gemini-2.5-pro
+doubling while gpt-5.1 and gpt-5.2 halved, with ELO and votes identical. The
+"arena reports exactly half" pattern is that instability, not a fixed offset.
+
+OpenRouter now supplies the price wherever a model can be matched (122 of ~300
+priced models), arena stays the fallback, and both land in the snapshot so the
+switch is auditable. Matching is deliberately strict: only reasoning-effort
+suffixes are stripped, since effort changes how many tokens a model emits, not
+what a token costs. Tier words, dates, "-preview" and ":batch" endpoints are
+never stripped. glm-5.3-flash and glm-5.3 are 17x apart; gpt-4-0125-preview is
+half the price of gpt-4. A wrong match is worse than no match.
+
+Ranking moved to a blended price, 3 output to 1 input. At 3:1 the frontier
+holds exactly the models an output-only ranking produced, verified under both
+price sources, so the blend moves the numbers and not the membership. At 1:1
+grok-4.20 drops out, which is why the weight is a named constant.
+
+Net effect on the list: deepseek-v4-flash is now the number one value pick,
+mimo-v2.5 and gemma-4-31b drop out, both correctly dominated once
+glm-5.3-flash carries its real $0.25 rather than arena's $0.50.
+
+Snapshots are append-only at the cell level now: blanks may be filled and new
+models added, recorded values never change, and conflicts are logged rather
+than applied. This does not make arena's price right, it makes the record
+deterministic. Where arena is the only source and it flip-flops, the first
+observation stands and the disagreement shows up in the run log. The
+2026-08-27 file, the only one the old overwrite semantics damaged, was
+repaired by replaying the new rule over its first recorded version.
