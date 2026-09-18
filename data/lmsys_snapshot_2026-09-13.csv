@@ -1,4 +1,5 @@
 Model_Name,ELO_Score,Provider,License,Votes,Input_Price,Output_Price,Context_Length,OR_Input_Price,OR_Output_Price,OR_Model_Id,Price_Match
+claude-fable-5-high,1505.68,Anthropic,Proprietary,30057,10.0,50.0,1000000.0,10.0,50.0,anthropic/claude-fable-5,effort
 claude-fable-5,1505.68,Anthropic,Proprietary,30057,10.0,50.0,1000000.0,10.0,50.0,anthropic/claude-fable-5,exact
 claude-opus-4-6-high,1504.56,Anthropic,Proprietary,71993,5.0,25.0,1000000.0,5.0,25.0,anthropic/claude-opus-4.6,effort
 claude-opus-4-7-high,1501.75,Anthropic,Proprietary,60002,5.0,25.0,1000000.0,5.0,25.0,anthropic/claude-opus-4.7,effort
@@ -182,8 +183,8 @@ claude-3-5-sonnet-20241022,1374.01,Anthropic,Proprietary,87694,3.0,15.0,200000.0
 qwen2.5-max,1373.89,Alibaba,Proprietary,32417,,,,,,,none
 glm-4.5-air,1373.21,Z.ai,MIT,30367,0.13,0.85,131072.0,0.13,0.85,z-ai/glm-4.5-air,exact
 claude-3-7-sonnet-20250219,1372.2,Anthropic,Proprietary,42448,3.0,15.0,200000.0,,,,none
-qwen3-next-80b-a3b-thinking,1368.96,Alibaba,Apache 2.0,13380,0.15,1.2,262144.0,0.15,1.2,qwen/qwen3-next-80b-a3b-thinking,exact
 trinity-large-thinking,1368.96,Arcee AI,Apache 2.0,28967,0.25,0.8,262144.0,0.25,0.8,arcee-ai/trinity-large-thinking,exact
+qwen3-next-80b-a3b-thinking,1368.96,Alibaba,Apache 2.0,13380,0.15,1.2,262144.0,0.15,1.2,qwen/qwen3-next-80b-a3b-thinking,exact
 glm-4.7-flash,1366.26,Z.ai,MIT,11491,0.0605,0.4,200000.0,0.0605,0.4,z-ai/glm-4.7-flash,exact
 gemma-3-27b-it,1365.19,Google,Gemma,46422,0.08,0.45,131072.0,0.08,0.45,google/gemma-3-27b-it,exact
 amazon-nova-experimental-chat-11-10,1365.08,Amazon,Proprietary,25086,,,,,,,none
@@ -349,8 +350,8 @@ granite-3.1-2b-instruct,1178.63,IBM,Apache 2.0,3188,,,,,,,none
 tulu-2-dpo-70b,1177.4,AllenAI/UW,AI2 ImpACT Low-risk,6535,,,,,,,none
 openhermes-2.5-mistral-7b,1175.6,NousResearch,Apache-2.0,5006,0.17,0.17,,,,,none
 vicuna-33b,1172.64,LMSYS,Non-commercial,22479,0.0,0.0,2048.0,,,,none
-starling-lm-7b-beta,1170.8,Nexusflow,Apache-2.0,16056,,,,,,,none
 phi-3-small-8k-instruct,1170.8,Microsoft,MIT,17766,0.15,0.6,,,,,none
+starling-lm-7b-beta,1170.8,Nexusflow,Apache-2.0,16056,,,,,,,none
 llama-2-70b-chat,1170.4,Meta,Llama 2 Community,38492,0.7,2.8,4096.0,,,,none
 starling-lm-7b-alpha,1167.15,UC Berkeley,CC-BY-NC-4.0,10224,,,,,,,none
 llama-3.2-3b-instruct,1166.51,Meta,Llama 3.2,7936,0.05,0.33,131072.0,0.05,0.33,meta-llama/llama-3.2-3b-instruct,exact
